@@ -1,0 +1,15 @@
+﻿20221116
+
+- Gerekli temel modellerin hepsi tanımlandı
+- İlişkili veri tabanı tabloları kurulacak
+- Veri tablosu yapılan modelleri lucidchartta açık yeşile boyayalım
+
+20221127
+
+- CariOdemeDekontuna ProjeKodId alanı eklendi. Bunun sebebi sipariş kaydı olmayan gayrıresmi ödemelerin hangi proje için olduğunu tespit etmek.
+- Bazı sürekli giderler (kira-maaş vb) için şart olmasa bile sabit proje kodları oluşturulabilir.
+
+20230112
+
++ WebApi'de bütün json'lar Newtonsoft Json olacak.
++ WebApi metodlarına veri girişi byte dizisi formatında olacak

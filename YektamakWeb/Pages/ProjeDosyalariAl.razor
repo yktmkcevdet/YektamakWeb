@@ -1,0 +1,138 @@
+﻿@page "/ProjeDosyalariAl/"
+@using Models
+@using Requests
+@using System.Data
+@using Microsoft.AspNetCore;
+@using NPOI.HSSF.UserModel;
+@using NPOI.SS.UserModel
+@using NPOI.XSSF.UserModel
+@using Utilities
+
+<h3>ProjeDosyalariAl</h3>
+<form method="post" enctype="multipart/form-data">
+    <div>
+        <label for="comboBox">Projeler</label>
+        <select id="comboBox" name="ComboBoxValue" @onchange="OnProjeChanged">
+            <option value="">Seçim Yapınız</option>
+            @foreach (var item in _constants.Projes())
+            {
+                <option value="@item.Id">@item.kod</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label for="fileInput">Excel Dosyası Seçin</label>
+        <InputFile OnChange="HandleFileSelected" />
+    </div>
+
+    <button type="button" @onclick="DosyalariAktar">Yükle ve İşle</button>
+</form>
+
+@if (!string.IsNullOrEmpty(resultMessage))
+{
+    <p>@resultMessage</p>
+}
+
+@code {
+    [Inject] GlobalData _globalData { get; set; }
+    [Inject] IHttpContextAccessor _httpContextAccessor { get; set; }
+    [Inject] ProgramConst _constants { get; set; }
+    private string selectedProjeId; // Seçilen proje ID'sini tutacak değişken
+    private string resultMessage; // Sonuç mesajı
+    private IBrowserFile? uploadedFile; // Kullanıcının seçtiği dosya
+
+    private void HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        if (e.File is not null)
+        {
+            // Kullanıcının seçtiği dosyayı IBrowserFile olarak alıyoruz
+            uploadedFile = (IBrowserFile)e.File;
+            resultMessage = "Dosya seçildi: " + uploadedFile.Name;
+        }
+        else
+        {
+            resultMessage = "Lütfen bir dosya seçiniz.";
+        }
+    }
+
+    private async Task DosyalariAktar()
+    {
+        if (uploadedFile == null)
+        {
+            resultMessage = "Lütfen bir dosya seçiniz.";
+            return;
+        }
+
+        try
+        {
+            long maxFileSize = 10 * 1024 * 1024;
+
+            if (uploadedFile.Size > maxFileSize)
+            {
+                resultMessage = "Dosya boyutu çok büyük. Maksimum izin verilen boyut: 10 MB.";
+                return;
+            }
+            using var memoryStream = new MemoryStream();
+            await uploadedFile.OpenReadStream(maxFileSize).CopyToAsync(memoryStream);
+            memoryStream.Position = 0; // Stream başına dönün
+            IWorkbook workbook;
+
+            // Dosya uzantısına göre doğru sınıfı kullanın
+            if (uploadedFile.Name.EndsWith(".xls"))
+            {
+                workbook = new HSSFWorkbook(memoryStream); // .xls formatı için
+            }
+            else if (uploadedFile.Name.EndsWith(".xlsx"))
+            {
+                workbook = new XSSFWorkbook(memoryStream); // .xlsx formatı için
+            }
+            else
+            {
+                resultMessage = "Desteklenmeyen dosya formatı. Lütfen bir Excel dosyası yükleyiniz.";
+                return;
+            }
+            var sheet = workbook.GetSheetAt(0); // İlk sayfa
+            List<ProjeExcel> projeExcelList = new List<ProjeExcel>();
+            for (int row = 1; row <= sheet.LastRowNum; row++)
+            {
+                var rowData = sheet.GetRow(row);
+                ProjeExcel projeExcel = new ProjeExcel
+                    {
+                        kod = rowData.GetCell(1)?.ToString(),
+                        parcaAdi = rowData.GetCell(2)?.ToString(),
+                        miktar = rowData.GetCell(3)?.ToString(),
+                        adet = rowData.GetCell(4)?.ToString(),
+                        fark = rowData.GetCell(5)?.ToString(),
+                        boyut = rowData.GetCell(6)?.ToString(),
+                        uzunluk = rowData.GetCell(7)?.ToString(),
+                        malzeme = rowData.GetCell(8)?.ToString(),
+                        aciklama = rowData.GetCell(9)?.ToString(),
+                        agirlik = rowData.GetCell(10)?.ToString(),
+                        toplamAgirlik = rowData.GetCell(11)?.ToString()
+                    };
+                projeExcelList.Add(projeExcel);
+            }
+
+            resultMessage = $"{projeExcelList.Count} satır başarıyla işlendi.";
+        }
+        catch (Exception ex)
+        {
+            resultMessage = "Hata: " + ex.Message;
+        }
+    }
+
+    private void OnProjeChanged(ChangeEventArgs e)
+    {
+        selectedProjeId = e.Value?.ToString();
+        if (string.IsNullOrEmpty(selectedProjeId))
+        {
+            resultMessage = "Lütfen bir proje seçiniz.";
+        }
+        else
+        {
+            resultMessage = $"Seçilen proje ID: {selectedProjeId}";
+        }
+    }
+}
+

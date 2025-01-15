@@ -1,0 +1,77 @@
+﻿@page "/ProjeDosyalari/" 
+
+@using BlazorApp1.Features.Commands.Account.Login
+@using Models
+@using Requests
+@using System.Data
+@using Utilities;
+
+<h3>Deneme</h3>
+<PageTitle>Proje Dosyaları</PageTitle>
+<div class="d-flex justify-content-center align-items-center">
+    <button type="button" class="btn btn-primary" style="width: 200px; height: 50px;" @onclick="GetProjeDosyalari">
+        Giriş Yap
+    </button>
+    <select class="form-control" @bind="selectedProjeId" @bind:after="GetProjeDosyalari">
+        <option value="">Seçim Yapınız</option>
+        @foreach (var item in _constants.Projes())
+        {
+            <option value="@item.Id">@item.kod</option>
+        }
+    </select>
+</div>
+
+<h3>Proje Dosyaları</h3>
+
+@if (stokKarts == null)
+{
+    <p>Veriler yükleniyor...</p>
+}
+else if (stokKarts.Count<StokKart>() == 0)
+{
+    <p>Gösterilecek veri bulunamadı.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th id="stokKartId">Ürün ID</th>
+                <th>Proje Kodu</th>
+                <th>Ürün Kodu</th>
+                <th>Ürün Adı</th>
+                <th>pdf</th>
+                <th>dxf</th>
+                <th>step</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stokKart in stokKarts)
+            {
+                <tr>
+                    <td>@stokKart.Id</td>
+                    <td>@stokKart.proje.kod</td>
+                    <td>@stokKart.kod</td>
+                    <td>@stokKart.ad</td>
+                    <td class="image-cell" @onclick="()=>PdfGoster(stokKart)" style="cursor: pointer;">
+                        <img src="pdf.png" alt="Default Image" class="default-image" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    
+}
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-danger mt-3">
+        @message
+    </div>
+}
+@code {
+
+@inject GlobalData _globalData
+    @inject UserSession _userSession
+    private ProgramConst _constants;
+}

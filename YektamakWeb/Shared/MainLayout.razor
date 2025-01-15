@@ -1,0 +1,25 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page d-flex">
+    <div class="sidebar @(isSidebarOpen ? "open" : "closed") bg-light border-end" style=" width=250px">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="container-fluid">
+            <a href="/" target="_blank">Log Out</a>
+        </div>
+
+        <article class="container-fluid overflow-auto">
+            @Body
+        </article>
+    </main>
+</div>
+@code {
+    private bool isSidebarOpen = true;
+
+    private void ToggleSidebar()
+    {
+        isSidebarOpen = !isSidebarOpen;
+    }
+}

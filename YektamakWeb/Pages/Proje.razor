@@ -1,0 +1,198 @@
+﻿@page "/Proje/"
+
+@using BlazorApp1.Features.Commands.Account.Login
+@using Models
+@using Requests
+@using System.Data
+@using Utilities
+@using YektamakWeb.Components.Dialogs
+
+<h3>Proje Dosyaları</h3>
+<PageTitle>Proje Dosyaları</PageTitle>
+<div class="container-sm">
+   
+    <table class="table-responsive">
+        <tbody>
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-primary flex-column" @onclick="OpenDialog">
+                        Proje Dosyaları Yükle
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="flex-column">Proje Kodu</label>
+                    <select class="flex-column" @bind="selectedProjeId" @bind:after="GetProjeDosyalari">
+                        <option value="" selected disabled>Seçim Yapınız</option>
+                        @foreach (var item in _constants.Projes())
+                        {
+                            <option value="@item.Id">@item.kod</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <label class="flex-column" style="width:max-content">Parça Grubu</label>
+                    <select class="flex-column" @bind="selectedParcaGrupId" @bind:after="GetProjeDosyalari">
+                        <option value="" selected disabled>Seçim Yapınız</option>
+                        @foreach (var item in _constants.ParcaGrup())
+                        {
+                            <option value="@item.Id">@item.kod</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <label class="flex-column" style="width:max-content">Malzeme Grubu</label>
+                    <select class="flex-column" @bind="selectedParcaGrupId" @bind:after="GetProjeDosyalari">
+                        <option value="" selected disabled>Seçim Yapınız</option>
+                        @foreach (var item in _constants.ParcaGrup())
+                        {
+                            <option value="@item.Id">@item.kod</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <label class="flex-column" style="width:max-content">Parça Adı</label>
+                    <input class="flex-column" @bind="selectedParcaGrupId" @bind:after="GetProjeDosyalari">
+                        
+                    </input>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    @if (IsLoading)
+    {
+        <div class="d-flex justify-content-center align-items-center overlay">
+            <div class="spinner-border text-primary" role="status"></div>
+        </div>
+    }
+</div>
+
+
+@if (stokKarts == null)
+{
+    <p>Veriler yükleniyor...</p>
+}
+else if (stokKarts.Count<StokKart>() == 0)
+{
+    <p>Gösterilecek veri bulunamadı.</p>
+}
+else
+{
+    <div clas="container">
+        <table class="table-responsive">
+            <thead>
+                <tr>
+                    <th id="stokKartId">Ürün ID</th>
+                    <th>Proje Kodu</th>
+                    <th>Ürün Kodu</th>
+                    <th>Ürün Adı</th>
+                    <th>pdf</th>
+                    <th>dxf</th>
+                    <th>step</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var stokKart in stokKarts)
+                {
+                    <tr>
+                        <td>@stokKart.Id</td>
+                        <td>@stokKart.proje.kod</td>
+                        <td>@stokKart.kod</td>
+                        <td>@stokKart.ad</td>
+                        <td class="image-cell" @onclick="()=>PdfGoster(stokKart.Id)" style="cursor: pointer;">
+                            <img src="/pdf.png" alt="Default Image" class="default-image" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-danger mt-3">
+        @message
+    </div>
+}
+<PdfView @ref="pdfViewer" />
+<DialogFragment @ref="dialogFragment" />
+@code {
+    @inject ProgramConst _constants
+    @inject UserSession _userSession
+    [Inject]
+    private NavigationManager? navigation { get; set; }
+    private PdfView pdfViewer;
+    private string message;
+    private bool IsLoading;
+    private int selectedProjeId;
+    private int stokKartId;
+    private int selectedParcaGrupId;
+    private DialogFragment? dialogFragment;
+    private void OpenDialog()
+    {
+        dialogFragment?.ShowDialog();
+    }
+    public List<StokKart> stokKarts = new List<StokKart>();
+
+    protected override void OnInitialized()
+    {
+    }
+    private async Task GetProjeDosyalari()
+    {
+        IsLoading = true;
+        stokKarts = new List<StokKart>();
+        try
+        {
+            // API çağrısı yap
+            StokKart stokKart = new StokKart();
+            stokKart.proje.Id = selectedProjeId;
+            stokKart.parcaGrup.Id = selectedParcaGrupId;
+            string serializeString = await WebMethods.GetStokKart(stokKart);
+            DataSet dataSet = GlobalData.JsonStringToDataSet(serializeString);
+            if (dataSet != null)
+            {
+                foreach (DataRow dataRow in dataSet.Tables[0].Rows)
+                {
+                    stokKart = GlobalData.DataRowToModel<StokKart>(dataRow);
+                    stokKarts.Add(stokKart);
+                }
+            }
+            IsLoading = false;
+        }
+        catch (Exception ex)
+        {
+            message = $"Veri çekme hatası: {ex.Message}";
+            IsLoading = false;
+        }
+    }
+
+    private async void PdfGoster(int stokKartId)
+    {
+        StokKart stokKart = new StokKart();
+        stokKart.Id = stokKartId;
+        string serializeString = await WebMethods.GetStokKartPdf(stokKart);
+        DataSet dataSet = GlobalData.JsonStringToDataSet(serializeString);
+        if (dataSet != null)
+        {
+            foreach (DataRow dataRow in dataSet.Tables[0].Rows)
+            {
+                stokKart = GlobalData.DataRowToModel<StokKart>(dataRow);
+            }
+        }
+        
+        if (pdfViewer != null)
+        {
+            await JSRuntime.InvokeVoidAsync("openPdfBlob", stokKart.pdf);
+            //pdfViewer.Open($"data:application/pdf;base64,{Convert.ToBase64String(stokKart.pdf)}");
+        }
+        
+        //dialogFragment.ShowDialog();
+    }
+   
+    private void OpenPage(string page)
+    {
+        navigation?.NavigateTo(char.ToUpper(page[0]) + page.Substring(1).ToLower());
+    }
+
+}
