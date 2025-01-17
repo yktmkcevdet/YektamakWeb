@@ -2,7 +2,7 @@
 {
     partial class WebMethods
     {
-        public static async Task<string> GetGlobalData()
+        public async Task<string> GetGlobalData()
         {
             return await GetAsyncMethod("GetGlobalData");
         }

@@ -2,7 +2,7 @@
 {
     partial class WebMethods
     {
-        public static async Task<string> GetCariHesapEkstresi()
+        public async Task<string> GetCariHesapEkstresi()
         {
             return await GetAsyncMethod("GetCariHesapEkstresi");
         }

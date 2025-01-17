@@ -1,20 +1,19 @@
-﻿using Newtonsoft.Json;
+﻿using Models;
+using Newtonsoft.Json;
+using Requests;
 using System.Data;
 using System.Net;
 using System.Net.Mail;
-using System.Net.Sockets;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using Models;
-using Requests;
-using Microsoft.Extensions.Configuration;
 
 namespace Utilities
 
 {
     public class GlobalData
     {
+        IWebMethods _webMethods;
         public static List<Sektor> sektorList;
         public static List<Firma> bankaList;
         public static List<DovizCinsi> dovizList;
@@ -36,11 +35,15 @@ namespace Utilities
         public static List<StokKart> stokKartList;
         public static List<Malzeme> malzemeList;
         public static List<Proje> tumProjeKodList;
-        
+
+        public GlobalData(IWebMethods webMethods)
+        {
+            _webMethods = webMethods;
+        }
 
         public async Task SetGlobals()
         {
-            DataSet dataSetGlobalData = JsonStringToDataSet(await WebMethods.GetAsyncMethod("GetGlobalData"));
+            DataSet dataSetGlobalData = JsonStringToDataSet(await _webMethods.GetAsyncMethod("GetGlobalData"));
 
 
             #region sektorList

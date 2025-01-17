@@ -37,5 +37,15 @@ namespace FinansalTakipWebApiCore.Controllers
         {
             return ResultData<ParcaGrup>(restData, DatabaseJobsStokKart.GetParcaGrup);
         }
+        [HttpPost, Route("api/DeleteProjeDosya")]
+        public string DeleteProjeDosya([FromBody] string restData)
+        {
+            return ResultData<Proje>(restData, DatabaseJobsStokKart.DeleteProjeDosya);
+        }
+        [HttpPost, Route("api/GetMalzemeGrup")]
+        public string GetMalzemeGrup([FromBody] string restData)
+        {
+            return ResultData<MalzemeGrup>(restData, DatabaseJobsStokKart.GetMalzemeGrup);
+        }
     }
 }

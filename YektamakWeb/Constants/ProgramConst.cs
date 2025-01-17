@@ -4,33 +4,31 @@ using Models;
 using System.Data;
 using Requests;
 using Utilities;
-using System.Collections.Generic;
 
 namespace YektamakWeb
 {
     public class ProgramConst
     {
         public static string NavMenuCssClass { get; set; } = "default-class";
-        private readonly IConfiguration _configuration;
         
         private readonly ProtectedLocalStorage _localStorage;
         private readonly UserSession _userSession;
-
+        IWebMethods _webMethods;
         /// <summary>
         /// Kendi firmamızın id'si
         /// </summary>
         public static int kendiFirmaId;
 
-        public ProgramConst(IConfiguration configuration, ProtectedLocalStorage localStorage, UserSession userSession)
+        public ProgramConst(ProtectedLocalStorage localStorage, UserSession userSession, IWebMethods webMethods) 
         {
-            _configuration = configuration;
             _localStorage = localStorage;
             _userSession = userSession;
+            _webMethods = webMethods;
         }
-        
+
         public async Task<List<Menu>> AnaMenuList ()
         {
-            DataSet dataSetGlobalData = GlobalData.JsonStringToDataSet(await WebMethods.GetAsyncMethod("GetGlobalData"));
+            DataSet dataSetGlobalData = GlobalData.JsonStringToDataSet(await _webMethods.GetAsyncMethod("GetGlobalData"));
             List<Menu> anaMenuList = new List<Menu>();
             foreach (DataRow dr in dataSetGlobalData.Tables[9].Select($"rolId={_userSession.rolId}"))
             {
@@ -44,7 +42,7 @@ namespace YektamakWeb
         }
         public async Task<List<Yetki>> YetkiList()
         {
-            DataSet dataSetGlobalData = GlobalData.JsonStringToDataSet(await WebMethods.GetAsyncMethod("GetGlobalData"));
+            DataSet dataSetGlobalData = GlobalData.JsonStringToDataSet(await _webMethods.GetAsyncMethod("GetGlobalData"));
             List<Yetki> yetkiList = new List<Yetki>();
             foreach (DataRow dr in dataSetGlobalData.Tables[10].Select($"rolId={_userSession.rolId}"))
             {
@@ -75,9 +73,8 @@ namespace YektamakWeb
             }
             return projeKod;
         }
-        public List<ParcaGrup> ParcaGrup()
+        public List<ParcaGrup> ParcaGrup(ParcaGrup parcaGrup)
         {
-            ParcaGrup parcaGrup= new();
             List<ParcaGrup> parcaGrups = new List<ParcaGrup>();
             string jsonString = WebMethods.GetParcaGrup(parcaGrup);
             DataSet dataSet = GlobalData.JsonStringToDataSet(jsonString);
@@ -88,6 +85,19 @@ namespace YektamakWeb
                 parcaGrups.Add(parcaGrup1);
             }
             return parcaGrups;
+        }
+        public List<MalzemeGrup> MalzemeGrup(MalzemeGrup malzemeGrup)
+        {
+            List<MalzemeGrup> malzemeGrups = new List<MalzemeGrup>();
+            string jsonString = WebMethods.GetMalzemeGrup(malzemeGrup);
+            DataSet dataSet = GlobalData.JsonStringToDataSet(jsonString);
+            foreach (DataRow dataRow in dataSet.Tables[0].Rows)
+            {
+                MalzemeGrup malzemeGrup1;
+                malzemeGrup1 = GlobalData.DataRowToModel<MalzemeGrup>(dataRow);
+                malzemeGrups.Add(malzemeGrup1);
+            }
+            return malzemeGrups;
         }
     }
 }

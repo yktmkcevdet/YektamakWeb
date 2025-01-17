@@ -16,7 +16,7 @@ namespace Requests
         {
             return await PostAsyncMethod(satisProje, "GetSatisProjeSafhaList");
         }
-        public static async Task<string> GetProjeAsamaTanimlari()
+        public async Task<string> GetProjeAsamaTanimlari()
         {
             return await GetAsyncMethod("GetProjeAsamaTanimlari");
         }

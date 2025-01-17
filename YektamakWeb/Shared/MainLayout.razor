@@ -1,13 +1,14 @@
-﻿@inherits LayoutComponentBase
+﻿@using BlazorApp1.Features.Commands.Account.Login
+@inherits LayoutComponentBase
 
 <div class="page d-flex">
-    <div class="sidebar @(isSidebarOpen ? "open" : "closed") bg-light border-end" style=" width=250px">
+    <div class="sidebar @(isSidebarOpen ? "open" : "close") bg-light border-end" style=" width:250px" onclick=@ToggleSidebar>
         <NavMenu />
     </div>
 
     <main>
         <div class="container-fluid">
-            <a href="/" target="_blank">Log Out</a>
+            <a href="/" @onclick="LogOut">Log Out</a>
         </div>
 
         <article class="container-fluid overflow-auto">
@@ -16,10 +17,16 @@
     </main>
 </div>
 @code {
+    [Inject]
+    private UserSession userSession { get; set; }
     private bool isSidebarOpen = true;
 
     private void ToggleSidebar()
     {
         isSidebarOpen = !isSidebarOpen;
+    }
+    private void LogOut()
+    {
+        userSession.Logout();
     }
 }

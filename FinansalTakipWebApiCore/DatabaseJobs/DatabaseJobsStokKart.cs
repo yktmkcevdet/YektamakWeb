@@ -33,5 +33,13 @@ namespace FinansalTakipWebApiCore.DatabaseJobs
         {
             return DataAccessLayer.dataAccesLayer.GetObject(parcaGrup, "spGetParcaGrup");
         }
+        public static string DeleteProjeDosya(Proje proje)
+        {
+            return DataAccessLayer.dataAccesLayer.DeleteObject(proje, "spDeleteProjeDosya");
+        }
+        public static string GetMalzemeGrup(MalzemeGrup malzemeGrup)
+        {
+            return DataAccessLayer.dataAccesLayer.GetObject(malzemeGrup, "spGetMalzemeGrup");
+        }
     }
 }

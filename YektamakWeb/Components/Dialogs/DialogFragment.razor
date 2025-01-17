@@ -4,8 +4,9 @@
     <div class="dialog-backdrop">
         <div class="dialog-content">
             <h3>Deneme</h3>
-            <div>@ChildContent</div>
+            <div style="overflow: auto;">@ChildContent</div>
             <button @onclick="HideDialog">Kapat</button>
+            @* <iframe src="@ChildContent" style="width: 100%; height: 100%; border: none;"></iframe> *@
         </div>
     </div>
 }
@@ -18,11 +19,18 @@
     public void ShowDialog()
     {
         IsVisible = true;
+        StateHasChanged();
     } 
     public void HideDialog() => IsVisible = false;
 }
 
 <style>
+    .dialog-content {
+        width: 100%;
+        height: 400px; /* İstediğiniz yükseklik */
+        overflow: auto; /* İçerik sığmadığında kaydırma çubuklarını gösterir */
+    }
+
     .dialog-backdrop {
         position: fixed; /* Sayfa boyunca sabit kalmasını sağlar */
         top: 0;

@@ -15,13 +15,13 @@ namespace YektamakWeb.Pages
         private string userName=default!;
         private string password = default!;
         private string? message;
-
+        [Inject]
+        private  IHttpContextAccessor _httpContextAccessor { get; set; }
         [Inject]
         private NavigationManager? navigation { get; set; }
         [Inject]
         LoginHandler _loginHandler { get; set; } = default!;
-        [Inject]
-        UserSession _userSession { get; set; } = default!;
+
         private void LoginProcedures()
         {
             if (!CheckFields()) return;
@@ -72,9 +72,12 @@ namespace YektamakWeb.Pages
                 else if (newPasswordMode == false)
                 {
                     var token = _loginHandler.GenerateJwtToken(user);
-                    _userSession.Id = user.Id;
-                    _userSession.rolId = user.rolId;
-                    _userSession.Login(user.ad);
+                    var userSession = _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<UserSession>();
+                    userSession.UserName = user.ad;
+                    userSession.IsLoggedIn = true;
+                    userSession.Role = user.rolId.ToString();
+                    userSession.rolId = user.rolId;
+                    userSession.Login();
                     OpenMainMenu(user);
                 }
             }

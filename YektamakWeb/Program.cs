@@ -1,5 +1,4 @@
 using BlazorApp1.Features.Commands.Account.Login;
-using MathNet.Numerics;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Requests;
@@ -14,10 +13,11 @@ builder.Services.AddRazorPages();
 builder.Services.AddBlazorBootstrap();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 // Dependency Injection
 builder.Services.AddScoped<UserSession>();
 builder.Services.AddTransient<LoginHandler>();
-builder.Services.AddTransient<WebMethods>();
+builder.Services.AddScoped<IWebMethods, WebMethods>();
 builder.Services.AddTransient<ProgramConst>();
 builder.Services.AddTransient<Utilities.GlobalData>();
 // JWT Authentication
@@ -30,7 +30,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;  // Yalnýzca sunucu tarafýndan eriþilebilir
     options.Cookie.IsEssential = true;  // Oturum çerezi, GDPR gereksinimleri nedeniyle gerekli
 });
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 
 builder.Services.AddAuthentication(options =>
 {
@@ -49,9 +49,14 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
     };
 });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Role", "1"));
+    options.AddPolicy("UserOnly", policy => policy.RequireClaim("Role", "2"));
+    options.AddPolicy("ProjeTasarimMuhendisiOnly", policy => policy.RequireClaim("Role", "5"));
+});
 // Session servisini ekleyin
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
-
 
 var app = builder.Build();
 
@@ -68,7 +73,9 @@ app.UseHttpsRedirection();
 app.UseSession();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+app.MapFallbackToPage("/_host");
 
 app.Run();

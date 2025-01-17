@@ -30,7 +30,7 @@ namespace Requests
         {
             return await PostAsyncMethod(ekran, "DeleteEkran");
         }
-        public static async Task<string> GetMenu()
+        public async Task<string> GetMenu()
         {
             return await GetAsyncMethod("GetMenu");
         }

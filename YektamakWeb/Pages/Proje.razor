@@ -1,64 +1,81 @@
 ﻿@page "/Proje/"
-
+@attribute [Authorize(Policy = "ProjeTasarimMuhendisiOnly")]
 @using BlazorApp1.Features.Commands.Account.Login
+@using Microsoft.AspNetCore.Components.Rendering
 @using Models
 @using Requests
 @using System.Data
 @using Utilities
 @using YektamakWeb.Components.Dialogs
 
-<h3>Proje Dosyaları</h3>
-<PageTitle>Proje Dosyaları</PageTitle>
-<div class="container-sm">
-   
+
+<div class="container">
+    <h3>Proje Dosyaları</h3>
+    <PageTitle>Proje Dosyaları</PageTitle>
+    <div class="row">
+        <div class="col-sm-4">
+            <button type="button" class="btn btn-primary flex-column" @onclick="OpenDialog">
+                Proje Dosyaları Yükle
+            </button>
+        </div>
+        <div class="col-sm-4">
+            <ThemeSwitcher />
+        </div>
+    </div>
+
     <table class="table-responsive">
-        <tbody>
-            <tr>
-                <td>
-                    <button type="button" class="btn btn-primary flex-column" @onclick="OpenDialog">
-                        Proje Dosyaları Yükle
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="flex-column">Proje Kodu</label>
-                    <select class="flex-column" @bind="selectedProjeId" @bind:after="GetProjeDosyalari">
-                        <option value="" selected disabled>Seçim Yapınız</option>
-                        @foreach (var item in _constants.Projes())
-                        {
-                            <option value="@item.Id">@item.kod</option>
-                        }
-                    </select>
-                </td>
-                <td>
-                    <label class="flex-column" style="width:max-content">Parça Grubu</label>
-                    <select class="flex-column" @bind="selectedParcaGrupId" @bind:after="GetProjeDosyalari">
-                        <option value="" selected disabled>Seçim Yapınız</option>
-                        @foreach (var item in _constants.ParcaGrup())
-                        {
-                            <option value="@item.Id">@item.kod</option>
-                        }
-                    </select>
-                </td>
-                <td>
-                    <label class="flex-column" style="width:max-content">Malzeme Grubu</label>
-                    <select class="flex-column" @bind="selectedParcaGrupId" @bind:after="GetProjeDosyalari">
-                        <option value="" selected disabled>Seçim Yapınız</option>
-                        @foreach (var item in _constants.ParcaGrup())
-                        {
-                            <option value="@item.Id">@item.kod</option>
-                        }
-                    </select>
-                </td>
-                <td>
-                    <label class="flex-column" style="width:max-content">Parça Adı</label>
-                    <input class="flex-column" @bind="selectedParcaGrupId" @bind:after="GetProjeDosyalari">
+        <tr>
+            <td>
+                <label class="flex-column">Proje Kodu</label>
+            </td>
+            <td>
+                <select class="flex-column" @bind="selectedProjeId" @bind:after="GetProjeDosyalari">
+                    <option value="" selected disabled>Seçim Yapınız</option>
+                    @foreach (var item in _constants.Projes())
+                    {
+                        <option value="@item.Id">@item.kod</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="flex-column" style="width:max-content">Parça Grubu</label>
+            </td>
+            <td>
+                <select class="flex-column" @bind="selectedParcaGrupId" @bind:after="GetProjeDosyalari">
+                    <option value="" selected disabled>Seçim Yapınız</option>
+                    @foreach (var item in parcaGrup)
+                    {
+                        <option value="@item.Key">@item.Value</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="flex-column" style="width:max-content">Malzeme Grubu</label>
+            </td>
+            <td>
+                <select class="flex-column" @bind="selectedMalzemeGrupId" @bind:after="GetProjeDosyalari">
+                    <option value="" selected disabled>Seçim Yapınız</option>
+                    @foreach (var item in malzemeGrup)
+                    {
+                        <option value="@item.Key">@item.Value</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="flex-column" style="width:max-content">Parça Adı</label>
+            </td>
+            <td>
+                <input class="flex-column" @bind="parcaAdi" @bind:after="GetProjeDosyalari">
                         
-                    </input>
-                </td>
-            </tr>
-        </tbody>
+                </input>
+            </td>
+        </tr>
     </table>
     @if (IsLoading)
     {
@@ -66,8 +83,8 @@
             <div class="spinner-border text-primary" role="status"></div>
         </div>
     }
-</div>
 
+<br />
 
 @if (stokKarts == null)
 {
@@ -79,8 +96,7 @@ else if (stokKarts.Count<StokKart>() == 0)
 }
 else
 {
-    <div clas="container">
-        <table class="table-responsive">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th id="stokKartId">Ürün ID</th>
@@ -103,11 +119,16 @@ else
                         <td class="image-cell" @onclick="()=>PdfGoster(stokKart.Id)" style="cursor: pointer;">
                             <img src="/pdf.png" alt="Default Image" class="default-image" />
                         </td>
+                        <td class="image-cell" @onclick="()=>PdfGoster(stokKart.Id)" style="cursor: pointer;">
+                            <img src="/pdf.png" alt="Default Image" class="default-image" />
+                        </td>
+                        <td class="image-cell" @onclick="()=>PdfGoster(stokKart.Id)" style="cursor: pointer;">
+                            <img src="/pdf.png" alt="Default Image" class="default-image" />
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
-    </div>
 }
 @if (!string.IsNullOrEmpty(message))
 {
@@ -115,8 +136,9 @@ else
         @message
     </div>
 }
+</div>
 <PdfView @ref="pdfViewer" />
-<DialogFragment @ref="dialogFragment" />
+<DialogFragment @ref="dialogFragment">@renderFragment()</DialogFragment> 
 @code {
     @inject ProgramConst _constants
     @inject UserSession _userSession
@@ -128,7 +150,16 @@ else
     private int selectedProjeId;
     private int stokKartId;
     private int selectedParcaGrupId;
+    private int selectedMalzemeGrupId;
+    private string parcaAdi=string.Empty;
+    Dictionary<int, string> parcaGrup = new Dictionary<int, string>();
+    Dictionary<int, string> malzemeGrup = new Dictionary<int, string>();
     private DialogFragment? dialogFragment;
+    private RenderFragment renderFragment() => __builder =>
+    {
+        __builder.OpenComponent(0, typeof(ProjeDosyalariAl));
+        __builder.CloseComponent();
+    };
     private void OpenDialog()
     {
         dialogFragment?.ShowDialog();
@@ -148,6 +179,8 @@ else
             StokKart stokKart = new StokKart();
             stokKart.proje.Id = selectedProjeId;
             stokKart.parcaGrup.Id = selectedParcaGrupId;
+            stokKart.ad = parcaAdi;
+            stokKart.malzemeGrup.Id = selectedMalzemeGrupId;
             string serializeString = await WebMethods.GetStokKart(stokKart);
             DataSet dataSet = GlobalData.JsonStringToDataSet(serializeString);
             if (dataSet != null)
@@ -156,6 +189,14 @@ else
                 {
                     stokKart = GlobalData.DataRowToModel<StokKart>(dataRow);
                     stokKarts.Add(stokKart);
+                    if (parcaGrup.Count(id => id.Key == stokKart.parcaGrup.Id) == 0)
+                    {
+                        parcaGrup.Add(stokKart.parcaGrup.Id, stokKart.parcaGrup.kod);
+                    }
+                    if (malzemeGrup.Count(id => id.Key == stokKart.malzemeGrup.Id) == 0)
+                    {
+                        malzemeGrup.Add(stokKart.malzemeGrup.Id, stokKart.malzemeGrup.ad);
+                    }
                 }
             }
             IsLoading = false;
@@ -167,7 +208,7 @@ else
         }
     }
 
-    private async void PdfGoster(int stokKartId)
+    private async void PdfGoster(long stokKartId)
     {
         StokKart stokKart = new StokKart();
         stokKart.Id = stokKartId;
@@ -183,8 +224,8 @@ else
         
         if (pdfViewer != null)
         {
-            await JSRuntime.InvokeVoidAsync("openPdfBlob", stokKart.pdf);
-            //pdfViewer.Open($"data:application/pdf;base64,{Convert.ToBase64String(stokKart.pdf)}");
+            //await JSRuntime.InvokeVoidAsync("openPdfBlob", stokKart.pdf);
+            pdfViewer.Open($"data:application/pdf;base64,{Convert.ToBase64String(stokKart.pdf)}");
         }
         
         //dialogFragment.ShowDialog();

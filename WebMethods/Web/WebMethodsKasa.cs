@@ -16,7 +16,7 @@ namespace Requests
         {
             return Post(kasa, "DeleteKasa");
         }
-        public static async Task<string> GetKasalar()
+        public async Task<string> GetKasalar()
         {
             return await GetAsyncMethod("GetKasalar");
         }

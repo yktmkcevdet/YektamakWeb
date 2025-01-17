@@ -2,7 +2,7 @@
 {
     partial class WebMethods
     {
-        public static async Task<string> GetAllKDV()
+        public async Task<string> GetAllKDV()
         {
             return await GetAsyncMethod("GetAllKDV");
         }

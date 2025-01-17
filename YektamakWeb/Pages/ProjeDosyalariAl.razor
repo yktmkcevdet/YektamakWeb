@@ -1,4 +1,4 @@
-﻿@page "/ProjeDosyalariAl/"
+﻿@page "/ProjeDosyalariAl"
 @using Models
 @using Requests
 @using System.Data
@@ -7,7 +7,8 @@
 @using NPOI.SS.UserModel
 @using NPOI.XSSF.UserModel
 @using Utilities
-
+@using Microsoft.AspNetCore.Components.Web
+@inject IJSRuntime JS
 <h3>ProjeDosyalariAl</h3>
 <form method="post" enctype="multipart/form-data">
     <div>
@@ -22,11 +23,18 @@
     </div>
 
     <div>
-        <label for="fileInput">Excel Dosyası Seçin</label>
+        <label  for="fileInput">Excel Dosyası Seçin</label>
         <InputFile OnChange="HandleFileSelected" />
+        <InputFile OnChange="HandleFolderUpload" Multiple="true" />
+        <ul>
+            @foreach (var log in uploadLogs)
+            {
+                <li>@log</li>
+            }
+        </ul>
     </div>
 
-    <button type="button" @onclick="DosyalariAktar">Yükle ve İşle</button>
+    <button type="button" class="btn btn-primary flex-column" @onclick="DosyalariAktar">Yükle ve İşle</button>
 </form>
 
 @if (!string.IsNullOrEmpty(resultMessage))
@@ -35,14 +43,28 @@
 }
 
 @code {
-    [Inject] GlobalData _globalData { get; set; }
-    [Inject] IHttpContextAccessor _httpContextAccessor { get; set; }
-    [Inject] ProgramConst _constants { get; set; }
-    private string selectedProjeId; // Seçilen proje ID'sini tutacak değişken
-    private string resultMessage; // Sonuç mesajı
-    private IBrowserFile? uploadedFile; // Kullanıcının seçtiği dosya
+    [Inject] GlobalData _globalData { get; set; } = default!;
+    [Inject] IHttpContextAccessor? _httpContextAccessor { get; set; }
+    [Inject] ProgramConst? _constants { get; set; }
 
-    private void HandleFileSelected(InputFileChangeEventArgs e)
+    private List<string> selectedFiles = new();
+    private ElementReference inputElement; // HTML input öğesine referans
+    private string? resultMessage; // Sonuç mesajı
+    private IBrowserFile? uploadedFile; // Kullanıcının seçtiği dosya
+    private Models.Proje proje=new Models.Proje();
+    private string path=string.Empty;
+    private string[] files;
+    private List<string> uploadLogs = new();
+    private async Task HandleFolderSelection(ChangeEventArgs e)
+    {
+        if (e.Value is not null)
+        {
+            files = await JS.InvokeAsync<string[]>("getFileList", inputElement);
+            selectedFiles.AddRange(files);
+            
+        }
+    }
+    private async void HandleFileSelected(InputFileChangeEventArgs e)
     {
         if (e.File is not null)
         {
@@ -54,10 +76,38 @@
         {
             resultMessage = "Lütfen bir dosya seçiniz.";
         }
-    }
+        var uploadPath = Path.Combine("wwwroot", "uploads");
+        Directory.CreateDirectory(uploadPath); // Klasör yoksa oluştur
 
+        foreach (var file in e.GetMultipleFiles())
+        {
+            var filePath = Path.Combine(uploadPath, file.Name);
+            using var fileStream = new FileStream(filePath, FileMode.Create);
+            await file.OpenReadStream().CopyToAsync(fileStream);
+            uploadLogs.Add($"Dosya yüklendi: {file.Name}");
+        }
+    }
+    private async Task HandleFolderUpload(InputFileChangeEventArgs e)
+    {
+        var uploadPath = Path.Combine("wwwroot", "uploads");
+        Directory.CreateDirectory(uploadPath); // Klasör yoksa oluştur
+
+        var files = ((InputFileChangeEventArgs)e).GetMultipleFiles();
+        foreach (var file in files)
+        {
+            var relativePath = Path.Combine(uploadPath, file.Name);
+            using var stream = new FileStream(relativePath, FileMode.Create);
+            await file.OpenReadStream().CopyToAsync(stream);
+            uploadLogs.Add($"Dosya yüklendi: {file.Name}");
+        }
+    }
     private async Task DosyalariAktar()
     {
+        if (proje.Id == 0)
+        {
+            resultMessage = "Lütfen bir proje seçiniz.";
+            return;
+        }
         if (uploadedFile == null)
         {
             resultMessage = "Lütfen bir dosya seçiniz.";
@@ -73,6 +123,13 @@
                 resultMessage = "Dosya boyutu çok büyük. Maksimum izin verilen boyut: 10 MB.";
                 return;
             }
+            resultMessage = await WebMethods.DeleteProjeDosya(proje);
+            Dictionary<int,string> fileDict = new Dictionary<int,string>();
+
+            // foreach (File file in uploadedFile)
+            // {
+                
+            // }
             using var memoryStream = new MemoryStream();
             await uploadedFile.OpenReadStream(maxFileSize).CopyToAsync(memoryStream);
             memoryStream.Position = 0; // Stream başına dönün
@@ -93,46 +150,66 @@
                 return;
             }
             var sheet = workbook.GetSheetAt(0); // İlk sayfa
-            List<ProjeExcel> projeExcelList = new List<ProjeExcel>();
             for (int row = 1; row <= sheet.LastRowNum; row++)
             {
                 var rowData = sheet.GetRow(row);
-                ProjeExcel projeExcel = new ProjeExcel
-                    {
-                        kod = rowData.GetCell(1)?.ToString(),
-                        parcaAdi = rowData.GetCell(2)?.ToString(),
-                        miktar = rowData.GetCell(3)?.ToString(),
-                        adet = rowData.GetCell(4)?.ToString(),
-                        fark = rowData.GetCell(5)?.ToString(),
-                        boyut = rowData.GetCell(6)?.ToString(),
-                        uzunluk = rowData.GetCell(7)?.ToString(),
-                        malzeme = rowData.GetCell(8)?.ToString(),
-                        aciklama = rowData.GetCell(9)?.ToString(),
-                        agirlik = rowData.GetCell(10)?.ToString(),
-                        toplamAgirlik = rowData.GetCell(11)?.ToString()
-                    };
-                projeExcelList.Add(projeExcel);
+                StokKart stokKart = new StokKart();
+                MalzemeGrup malzemeGrup = new MalzemeGrup();
+                malzemeGrup.ad = rowData.GetCell(9)?.ToString() ?? "";
+                malzemeGrup = Utilities.GlobalData.DataRowToModel<MalzemeGrup>(Utilities.GlobalData.JsonStringToDataSet(WebMethods.GetMalzemeGrup(malzemeGrup)).Tables[0].Rows[0]);
+                stokKart.parcaGrup.Id = malzemeGrup.parcaGrupId;
+                stokKart.malzemeGrup.Id = malzemeGrup.Id;
+                stokKart.proje.Id = proje.Id;
+                stokKart.kod = rowData.GetCell(1)?.ToString() ?? "";
+                stokKart.ad = rowData.GetCell(2)?.ToString() ?? "";
+                stokKart.parcaAdi = rowData.GetCell(2)?.ToString() ?? "";
+                stokKart.miktar = Convert.ToInt32(rowData.GetCell(3)?.ToString() ?? "");
+                stokKart.adet = Convert.ToInt32(rowData.GetCell(4)?.ToString() ?? "");
+                stokKart.fark = Convert.ToInt32(rowData.GetCell(5)?.ToString() ?? "");
+                stokKart.boyut = rowData.GetCell(6)?.ToString() ?? "";
+                resultMessage = rowData.GetCell(7)?.ToString() ?? "0";
+                stokKart.uzunluk = Double.TryParse(rowData.GetCell(7)?.ToString() ?? "0",out Double uzunluk)?uzunluk:0;
+                stokKart.malzeme = rowData.GetCell(8)?.ToString() ?? "";
+                stokKart.aciklama = rowData.GetCell(9)?.ToString() ?? "";
+                stokKart.agirlik = Convert.ToDouble(rowData.GetCell(10)?.ToString() ?? "");
+                stokKart.olcuBirim.Id = 1;
+                stokKart.isFromExcel = true;
+                stokKart.parcaAltGrup.Id = 1;
+                stokKart.stokTipId = 1;
+                stokKart.profilTipId = 1;
+                var pdfFiles = files.First(file => file.Contains(stokKart.kod+".pdf"));
+                byte[] pdfContent = ReadPdfAsBinary(pdfFiles);
+                resultMessage=WebMethods.SaveStokKart(stokKart);
             }
-
-            resultMessage = $"{projeExcelList.Count} satır başarıyla işlendi.";
         }
         catch (Exception ex)
         {
             resultMessage = "Hata: " + ex.Message;
         }
     }
-
+    private byte[] ReadPdfAsBinary(string pdfPath)
+    {
+        return File.ReadAllBytes(pdfPath); // PDF'yi binary olarak oku
+    }
     private void OnProjeChanged(ChangeEventArgs e)
     {
-        selectedProjeId = e.Value?.ToString();
-        if (string.IsNullOrEmpty(selectedProjeId))
+        proje.Id = Convert.ToInt32(e.Value?.ToString());
+        if (proje.Id==0)
         {
             resultMessage = "Lütfen bir proje seçiniz.";
         }
         else
         {
-            resultMessage = $"Seçilen proje ID: {selectedProjeId}";
+            resultMessage = $"Seçilen proje ID: {proje.Id}";
         }
+    }
+    private string StokKoduOlustur(StokKart stokKart)
+    {
+        if (stokKart.ad=="" || stokKart.kod=="")
+        {
+            resultMessage = "kod veya parça adı alanı dolu omalıdır";
+        }
+        return resultMessage;
     }
 }
 

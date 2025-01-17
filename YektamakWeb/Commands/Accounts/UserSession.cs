@@ -6,35 +6,41 @@ namespace BlazorApp1.Features.Commands.Account.Login
 {
     public class UserSession
     {
-        public List<Menu> anaMenuList = new List<Menu>();
+        private readonly IWebMethods _webMethods;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public UserSession(IWebMethods webMethods, IHttpContextAccessor httpContextAccessor)
+        {
+            _webMethods = webMethods;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public List<Menu> anaMenuList { get; private set;}=new();
         public int Id { get; set; }
         public int rolId { get; set; }
-        public string UserName { get; set; }
+        public string? UserName;
         public string Role { get; set; }
         public event Action? OnChange;
-        public bool IsLoggedIn { get; private set; }
-        public async void Login(string userName)
+        public bool IsLoggedIn;
+        public void Login()
         {
-            IsLoggedIn = true;
-            UserName = userName;
-            DataSet dataSetGlobalData = GlobalData.JsonStringToDataSet(await WebMethods.GetAsyncMethod("GetGlobalData"));
-            foreach (DataRow dr in dataSetGlobalData.Tables[9].Select($"rolId={rolId}"))
+            DataSet dataSetGlobalData = GlobalData.JsonStringToDataSet( _webMethods.Get("GetGlobalData"));
+            anaMenuList = dataSetGlobalData.Tables[9]
+            .Select($"rolId={rolId}")
+            .Select(dr => new Menu
             {
-                Menu menu = new();
-                menu.menuId = int.Parse(dr["menuId"].ToString()??"");
-                menu.menuAdi = dr["menu"].ToString() ?? "";
-                menu.icon = dr["Icon"].ToString() ?? "";
-                anaMenuList.Add(menu);
-            }
-            
+                menuId = int.Parse(dr["menuId"]?.ToString() ?? "0"),
+                menuAdi = dr["menu"]?.ToString() ?? "",
+                icon = dr["Icon"]?.ToString() ?? ""
+            })
+            .ToList();
+
             NotifyStateChanged();
         }
 
         public void Logout()
         {
-            IsLoggedIn = false;
-            UserName = string.Empty;
-            
+            _httpContextAccessor.HttpContext?.Session.Clear();
             NotifyStateChanged();
         }
 

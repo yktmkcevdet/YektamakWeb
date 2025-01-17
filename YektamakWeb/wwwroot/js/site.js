@@ -20,3 +20,11 @@ function openPdfBlob(base64Data) {
     const url = URL.createObjectURL(blob);
     window.open(url, '_blank');
 }
+window.getFileList = (inputElement) => {
+    const files = [];
+    const fileList = inputElement.files;
+    for (let i = 0; i < fileList.length; i++) {
+        files.push(fileList[i].webkitRelativePath); // Dosyanýn klasör içindeki göreceli yolu
+    }
+    return files;
+};

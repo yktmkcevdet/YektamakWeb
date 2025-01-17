@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Requests
 {
-    public partial class WebMethods
+    public partial class WebMethods:IWebMethods
 	{
         private static HttpClientHandler handler = new HttpClientHandler
         {
@@ -58,7 +58,7 @@ namespace Requests
 			}
 			
 		}
-		public static async Task<string> GetAsyncMethod(string apiAdres)
+		public async Task<string> GetAsyncMethod(string apiAdres)
 		{
 			client.DefaultRequestHeaders.Clear();
 
@@ -69,7 +69,7 @@ namespace Requests
 			string returnValue = strResponse.Result;
 			return strResponse.Result;
 		}
-        public static string Get(string apiAdres)
+        public string Get(string apiAdres)
         {
             client.DefaultRequestHeaders.Clear();
             string url = ApiBaseUrl.server + "/api/" + apiAdres;

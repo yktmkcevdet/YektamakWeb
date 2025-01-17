@@ -28,5 +28,9 @@ namespace Requests
         {
             return Post(parcaGrup, "GetParcaGrup");
         }
+        public static string GetMalzemeGrup(MalzemeGrup malzemeGrup = null)
+        {
+            return Post(malzemeGrup, "GetMalzemeGrup");
+        }
     }
 }

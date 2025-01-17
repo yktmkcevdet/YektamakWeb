@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="WebUIGlobals\Global\" />
+    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
 </Project>

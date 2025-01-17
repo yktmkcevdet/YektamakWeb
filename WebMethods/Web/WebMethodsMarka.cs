@@ -2,11 +2,11 @@
 {
     partial class WebMethods
     {
-        public static async Task<string> TumMarkaVeAltGruplar()
+        public  async Task<string> TumMarkaVeAltGruplar()
         {
             return await GetAsyncMethod("TumMarkaVeAltGruplar");
         }
-        public static async Task<string> GetAllMarka()
+        public async Task<string> GetAllMarka()
         {
             return await GetAsyncMethod("GetAllMarka");
         }

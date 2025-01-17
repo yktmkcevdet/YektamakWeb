@@ -4,7 +4,7 @@ namespace Requests
 {
     public partial class WebMethods
     {
-        public static string GetTalepTipleri()
+        public string GetTalepTipleri()
         {
 			return Get("GetTalepTipleri");
 		}

@@ -4,7 +4,7 @@ namespace Requests
 {
     partial class WebMethods
     {
-        public static string GetCariOdemeComboLists()
+        public string GetCariOdemeComboLists()
         {
             return Get("GetCariOdemeComboLists");
         }

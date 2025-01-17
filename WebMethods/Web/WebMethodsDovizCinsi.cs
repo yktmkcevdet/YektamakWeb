@@ -2,7 +2,7 @@
 {
     partial class WebMethods
     {
-        public static string TumDovizCinsleri()
+        public string TumDovizCinsleri()
         {
             return Get("TumDovizCinsleri");
         }

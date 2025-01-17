@@ -2,11 +2,11 @@
 {
     partial class WebMethods
     { 
-        public static string GetParcaGrupList()
+        public string GetParcaGrupList()
         {
             return Get("GetParcaGrupList");
         }
-        public static string GetParcaAltGrupList()
+        public string GetParcaAltGrupList()
         {
             return Get("GetParcaAltGrupList");
         }

@@ -30,7 +30,7 @@ namespace Requests
         /// SatisProje tablosunda firmaID sütunu boş olan kayıtları getirir.
         /// </summary>
         /// <returns></returns>
-        public static  string GetAllUnassignedProjeKod()
+        public string GetAllUnassignedProjeKod()
         {
             return Get("UnassignedProjeKod");
         }
@@ -38,7 +38,7 @@ namespace Requests
         /// SatisProje tablosunda firmaID sütunu boş olmayan olan kayıtları getirir.
         /// </summary>
         /// <returns></returns>
-        public static string GetAllAssignedProjeKod()
+        public string GetAllAssignedProjeKod()
         {
             return Get("GetAllAssignedProjeKod");
         }
@@ -55,13 +55,17 @@ namespace Requests
         /// Satış siparişi açılmış projelerin listesini döndürür.
         /// </summary>
         /// <returns></returns>
-        public static async Task<string> GetAllOrderedProjeKod()
+        public async Task<string> GetAllOrderedProjeKod()
         {
             return await GetAsyncMethod("GetAllOrderedProjeKod");
         }
         public static string GetProjeKodByUserId(Proje proje)
         {
             return Post(proje, "GetProjeKodByUserId");
+        }
+        public static async Task<string> DeleteProjeDosya(Proje proje)
+        {
+            return await PostAsyncMethod(proje, "DeleteProjeDosya");
         }
     }
 
