@@ -5,7 +5,7 @@
 		public int Id;
 		public string satinalmaTalepNo;
 		public DateTime talepTarihi;
-		public int parcaGrupId;
+		public long parcaGrupId;
         private Proje _proje;
 		public Proje proje
 		{

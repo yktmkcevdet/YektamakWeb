@@ -1,10 +1,10 @@
-﻿using FinansalTakipWebApiCore.Business;
+﻿using Api.Business;
 using Models;
 using System.Data;
 using System.Data.SqlClient;
-using static FinansalTakipWebApiCore.Business.DataAccessLayerMssql;
+using static Api.Business.DataAccessLayerMssql;
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public class DatabaseJobsSatinalmaTalep
     {

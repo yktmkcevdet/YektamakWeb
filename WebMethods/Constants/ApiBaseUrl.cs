@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 
-namespace Requests.Constants
+namespace ApiService.Constants
 {
     internal class ApiBaseUrl
     {

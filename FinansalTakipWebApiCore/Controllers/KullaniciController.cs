@@ -1,10 +1,11 @@
-﻿using FinansalTakipWebApiCore.DatabaseJobs;
+﻿using Api.DatabaseJobs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using static FinansalTakipWebApiCore.Controllers.GeneralMethods;
+using Models.DTO;
+using static Api.Controllers.GeneralMethods;
 
-namespace FinansalTakipWebApiCore.Controllers
+namespace Api.Controllers
 {
     [ApiController]
     public class KullaniciController
@@ -44,8 +45,17 @@ namespace FinansalTakipWebApiCore.Controllers
         {
 			return ResultData<Ekran>(restData, DatabaseJobsKullanici.DeleteEkran);
 		}
+        [HttpPost, Route("api/GetAnaMenu")]
+        public string GetAnaMenu([FromBody] string restData)
+        {
+            return ResultData<AnaMenu>(restData, DatabaseJobsKullanici.GetAnaMenu);
+        }
+        [HttpPost, Route("api/GetYetki")]
+        public string GetYetki([FromBody] string restData)
+        {
+            return ResultData<Yetki>(restData, DatabaseJobsKullanici.GetYetki);
+        }
         [HttpGet, Route("api/GetMenu")]
-        [Authorize]
         public string GetMenu()
         {
             return DatabaseJobsKullanici.GetMenu();

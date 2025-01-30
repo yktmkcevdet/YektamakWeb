@@ -2,9 +2,12 @@
 
 @using BlazorApp1.Features.Commands.Account.Login
 @using Models
-@using Requests
+@using ApiService
 @using System.Data
+@using System.Security.Claims
 @using YektamakWeb.Components.Dialogs
+@using YektamakWeb.Commands.Accounts
+@using Utilities.Common
 <Dialog @ref="dialog">
     @((MarkupString)Content)
 </Dialog>
@@ -22,14 +25,13 @@
                 <input type="password" id="password" class="form-control" autocomplete="current-password" @bind="password" />
             </div>
             <div>
-                <button type="button" class="btn btn-primary w-100" @onclick="LoginProcedures">
+                <button type="button" class="btn btn-primary w-100" @onclick="LoginAsync">
                     Giriş Yap
                 </button>
             </div>
         </div>
     </div>
 </div>
-
 @if (!string.IsNullOrEmpty(message))
 {
     <div class="alert alert-danger mt-3">
@@ -37,6 +39,25 @@
     </div>
 }
 @code {
+    @inject AuthenticationStateProvider AuthStateProvider
+    @inject LoginService loginService
+    @inject NavigationManager navigationManager
+    private ClaimsPrincipal? user;
     private Dialog? dialog;
     private string Content = "<p>Bu bir <strong>HTML içeriğidir</strong>.</p>";
+    protected override async void OnInitialized()
+    {
+        
+    }
+    private async Task LoginAsync()
+    {
+        await loginService.LoginAsync(userName, password);
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        user = authState.User;
+        Kullanici kullanici = new Kullanici();
+        kullanici.ad = user.Identity.Name;
+        Cache.kullanici = kullanici;
+        navigationManager.NavigateTo("/Proje/");
+        //loginService.OnChange += StateHasChanged;
+    }
 }

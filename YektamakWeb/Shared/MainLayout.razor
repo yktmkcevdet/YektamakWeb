@@ -17,8 +17,8 @@
     </main>
 </div>
 @code {
-    [Inject]
-    private UserSession userSession { get; set; }
+    // [Inject]
+    // private UserSession userSession { get; set; }
     private bool isSidebarOpen = true;
 
     private void ToggleSidebar()
@@ -27,6 +27,6 @@
     }
     private void LogOut()
     {
-        userSession.Logout();
+        //userSession.Logout();
     }
 }

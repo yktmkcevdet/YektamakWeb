@@ -2,7 +2,7 @@
 using System.Data.Common;
 using System.Data.SqlClient;
 
-namespace FinansalTakipWebApiCore.Business
+namespace Api.Business
 {
     public interface IDataAccesLayer
     {

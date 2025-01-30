@@ -1,10 +1,10 @@
-﻿using FinansalTakipWebApiCore.DatabaseJobs;
+﻿using Api.DatabaseJobs;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace FinansalTakipWebApiCore.Controllers
+namespace Api.Controllers
 {
     public class TedarikciIadeFaturaControler : Controller
     {

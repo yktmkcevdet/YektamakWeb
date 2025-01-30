@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using FinansalTakipWebApiCore.TokenJobs;
+using Api.TokenJobs;
 
-namespace FinansalTakipWebApiCore
+namespace Api
 {
     // Program.cs veya Startup.cs
     public class Program

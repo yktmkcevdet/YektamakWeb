@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public static class DatabaseJobsTahakkukFisi
     {

@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GlobalData\Utilities.csproj" />
-    <ProjectReference Include="..\WebMethods\Requests.csproj" />
+    <ProjectReference Include="..\WebMethods\ApiService.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,9 +6,9 @@ using System.Reflection.Metadata;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Data.Common;
-using FinansalTakipWebApiCore.Business;
+using Api.Business;
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public static class DataBaseJobsSatisFatura
     {

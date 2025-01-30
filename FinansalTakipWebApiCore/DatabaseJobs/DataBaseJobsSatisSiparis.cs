@@ -6,10 +6,10 @@ using System.Reflection.Metadata;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Data.Common;
-using static FinansalTakipWebApiCore.Business.DataAccessLayerMssql;
-using FinansalTakipWebApiCore.Business;
+using static Api.Business.DataAccessLayerMssql;
+using Api.Business;
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public static class DataBaseJobsSatisSiparis
     {

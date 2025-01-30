@@ -1,8 +1,8 @@
-﻿using FinansalTakipWebApiCore.DatabaseJobs;
+﻿using Api.DatabaseJobs;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
-namespace FinansalTakipWebApiCore.Controllers
+namespace Api.Controllers
 {
     public class SatisSiparisControler : Controller
     {

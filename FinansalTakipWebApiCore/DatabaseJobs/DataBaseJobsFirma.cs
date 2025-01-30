@@ -2,10 +2,10 @@
 using System.Data.SqlClient;
 using System.Data;
 using Newtonsoft.Json;
-using static FinansalTakipWebApiCore.Business.DataAccessLayerMssql;
-using FinansalTakipWebApiCore.Business;
+using static Api.Business.DataAccessLayerMssql;
+using Api.Business;
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public static partial class DataBaseJobsFirma
     {

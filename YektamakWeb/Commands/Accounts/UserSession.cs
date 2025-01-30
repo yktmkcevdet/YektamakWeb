@@ -1,17 +1,16 @@
 ﻿using Models;
 using System.Data;
 using Utilities;
-using Requests;
+using ApiService;
+using NPOI.HSSF.Record;
 namespace BlazorApp1.Features.Commands.Account.Login
 {
     public class UserSession
     {
-        private readonly IWebMethods _webMethods;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserSession(IWebMethods webMethods, IHttpContextAccessor httpContextAccessor)
+        public UserSession(IHttpContextAccessor httpContextAccessor)
         {
-            _webMethods = webMethods;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -24,17 +23,17 @@ namespace BlazorApp1.Features.Commands.Account.Login
         public bool IsLoggedIn;
         public void Login()
         {
-            DataSet dataSetGlobalData = GlobalData.JsonStringToDataSet( _webMethods.Get("GetGlobalData"));
-            anaMenuList = dataSetGlobalData.Tables[9]
-            .Select($"rolId={rolId}")
-            .Select(dr => new Menu
-            {
-                menuId = int.Parse(dr["menuId"]?.ToString() ?? "0"),
-                menuAdi = dr["menu"]?.ToString() ?? "",
-                icon = dr["Icon"]?.ToString() ?? ""
-            })
-            .ToList();
-
+            //DataSet dataSetGlobalData = Utilities.Common.ConvertHelper.JsonStringToDataSet( WebMethods.Get("GetGlobalData"));
+            //anaMenuList = dataSetGlobalData.Tables[9]
+            //.Select($"rolId={rolId}")
+            //.Select(dr => new Menu
+            //{
+            //    Id = int.Parse(dr["Id"]?.ToString() ?? "0"),
+            //    ad = dr["ad"]?.ToString() ?? "",
+            //    icon = dr["icon"]?.ToString() ?? ""
+            //})
+            //.ToList();  
+            
             NotifyStateChanged();
         }
 

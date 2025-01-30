@@ -1,7 +1,7 @@
 ﻿using Models;
-using FinansalTakipWebApiCore.Business;
+using Api.Business;
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public class DatabaseJobsGorev
     {

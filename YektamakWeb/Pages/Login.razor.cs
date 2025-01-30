@@ -1,108 +1,92 @@
-﻿using BlazorApp1.Features.Commands.Account.Login;
-using Utilities;
+﻿using ApiService;
 using Models;
-using Requests;
-using Microsoft.AspNetCore.Components;
-using System.Data;
-using YektamakWeb.Components.Dialogs;
-using Microsoft.AspNetCore.Components.Rendering;
+using Utilities.Common;
 
 namespace YektamakWeb.Pages
 {
     public partial class Login
     {
         bool newPasswordMode = false;
-        private string userName=default!;
+        private string userName = default!;
         private string password = default!;
         private string? message;
-        [Inject]
-        private  IHttpContextAccessor _httpContextAccessor { get; set; }
-        [Inject]
-        private NavigationManager? navigation { get; set; }
-        [Inject]
-        LoginHandler _loginHandler { get; set; } = default!;
+       
+    
+        
+        //[Inject]
+        //LoginHandler _loginHandler { get; set; } = default!;
+        
+        //private async Task LoginProceduresAsync()
+        //{
+        //    if (!CheckFields()) return;
 
-        private void LoginProcedures()
+        //    Kullanici user = await FetchUserFromDatabase(userName);
+        //    if (user == null)
+        //    {
+        //        dialog.Content = "Kullanıcı bulunamadı.";
+        //        dialog?.ShowDialog();
+        //        return;
+        //    }
+
+        //    if (!VerifyPassword(user, user.sifre))
+        //    {
+        //        dialog.Content = "Kullanıcı adı veya şifre hatalı.";
+        //        dialog?.ShowDialog();
+        //        return;
+        //    }
+
+        //    var token = _loginHandler.GenerateJwtToken(user);
+
+        //    // Çerezi ekle
+        //    //_httpContextAccessor.HttpContext?.Response.Cookies.Append("AuthToken", token, new CookieOptions
+        //    //{
+        //    //    HttpOnly = true,
+        //    //    Secure = true,
+        //    //    SameSite = SameSiteMode.Lax,
+        //    //    Expires = DateTime.UtcNow.AddMinutes(30)
+        //    //});
+
+        //    // Oturum bilgisini güncelle
+        //    var userSession = _contextAccessor.HttpContext?.RequestServices.GetRequiredService<UserSession>();
+        //    if (userSession != null)
+        //    {
+        //        userSession.UserName = user.ad;
+        //        userSession.IsLoggedIn = true;
+        //        userSession.Role = user.rolId.ToString();
+        //        userSession.rolId = user.rolId;
+        //        userSession.Login();
+        //        bool auth=_contextAccessor.HttpContext.User.Identity.IsAuthenticated;
+        //    }
+
+        //    // Navigasyonu çerez eklendikten sonra yapın
+        //    navigation?.NavigateTo("/proje/");
+        //}
+
+        private async Task<Kullanici?> FetchUserFromDatabase(string userName)
         {
-            if (!CheckFields()) return;
-            string storedHashPassword = "";
+            // Kullanıcıyı veritabanından çek
+            string jsonString = await WebMethods.GetKullaniciAsync(new Kullanici { ad = userName });
+            var dataSet = ConvertHelper.JsonStringToDataSet(jsonString);
 
-            Kullanici user = new Kullanici();
-            user.ad = userName;
-            string jsonString = WebMethods.GetKullanici(user);
-            DataSet dataSet = GlobalData.JsonStringToDataSet(jsonString);
-            if (dataSet != null)
-            {
-                foreach (DataRow dr in dataSet.Tables[0].Rows)
-                {
-                    storedHashPassword = dataSet.Tables[0].Rows[0]["sifre"].ToString() ?? "";
-                    user.Id = int.Parse(dr["Id"].ToString() ?? "");
-                    user.salt = dr["salt"].ToString() ?? "";
-                    user.sifre = GlobalData.HashPassword(password, user.salt);
-                    user.personel = new Personel();
-                    user.personel.personelId = int.Parse(dr["personelId"].ToString() ?? "");
-                    user.personel.mail = dr["Mail"].ToString() ?? "";
-                    user.rolId = int.Parse(dr["rolId"].ToString() ?? "");
-                    user.isSifreDegisti = int.TryParse(dr["IsSifreDegisti"].ToString(), out int isSifreDegistiInt)
-                                ? isSifreDegistiInt == 1
-                                : false;
-                }
-            }
-            else
-            {
-                dialog.Content = jsonString;
-                dialog?.ShowDialog();
-            }
-            if (VerifyPassword(user, storedHashPassword))
-            {
-                if (user.isSifreDegisti == false && newPasswordMode == false)
-                {
-                    InitializeComponentsNewPassword();
+            if (dataSet == null || dataSet.Tables[0].Rows.Count == 0)
+                return null;
 
-                }
-                else if (newPasswordMode == true)
-                {
-                    if (CheckFields())
-                    {
-                        string newPass = "";
-                        CreateNewPassword(user, newPass);
-                        OpenMainMenu(user);
-                    }
-                }
-                else if (newPasswordMode == false)
-                {
-                    var token = _loginHandler.GenerateJwtToken(user);
-                    var userSession = _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<UserSession>();
-                    userSession.UserName = user.ad;
-                    userSession.IsLoggedIn = true;
-                    userSession.Role = user.rolId.ToString();
-                    userSession.rolId = user.rolId;
-                    userSession.Login();
-                    OpenMainMenu(user);
-                }
-            }
-            else
-            {
-                dialog.Content = "Kullanıcı Adı ya da Şifre hatalı";
-                dialog?.ShowDialog();
-            }
-
+            return ConvertHelper.DataRowToModel<Kullanici>(dataSet.Tables[0].Rows[0]);
         }
 
+        public void InitializeComponentsNewPassword() { }
 
-        public void InitializeComponentsNewPassword()
-        {
-        }
         public bool VerifyPassword(Kullanici user, string storedHash)
         {
             string hashedPassword = user.sifre;
             return hashedPassword == storedHash;
         }
+
         private void CreateNewPassword(Kullanici kullanici, string newPassWord)
         {
-            string salt = GlobalData.GenerateSalt();
+            string salt = LoginHelper.GenerateSalt();
             string password = newPassWord;
-            string hashedPassword = GlobalData.HashPassword(password, salt);
+            string hashedPassword = LoginHelper.HashPassword(password, salt);
 
             kullanici.sifre = hashedPassword;
             kullanici.salt = salt;
@@ -110,17 +94,10 @@ namespace YektamakWeb.Pages
             string httpResult = WebMethods.SaveKullanici(kullanici);
             if (httpResult.Contains("error", StringComparison.OrdinalIgnoreCase))
             {
-            }
-            else
-            {
+                dialog.Content = "Hata oluştu, şifre kaydedilemedi.";
+                dialog?.ShowDialog();
             }
         }
-        private void OpenMainMenu(Kullanici kullanici)
-        {
-            navigation?.NavigateTo("/Proje/"); // Yönlendirme
-        }
-
-
 
         private bool CheckFields()
         {

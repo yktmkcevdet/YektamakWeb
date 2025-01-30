@@ -1,8 +1,9 @@
 ﻿using Models;
-using Requests;
+using ApiService;
 using Microsoft.AspNetCore.Components;
 using System.Data;
 using Utilities;
+using Utilities.Common;
 
 namespace YektamakWeb.Pages
 {
@@ -20,13 +21,13 @@ namespace YektamakWeb.Pages
                 // API çağrısı yap
                 StokKart stokKart = new StokKart();
                 stokKart.proje.Id = selectedProjeId;
-                string serializeString = await WebMethods.GetStokKart(stokKart);
-                DataSet dataSet = GlobalData.JsonStringToDataSet(serializeString);
+                string serializeString = WebMethods.GetStokKart(stokKart);
+                DataSet dataSet = ConvertHelper.JsonStringToDataSet(serializeString);
                 if (dataSet != null)
                 {
                     foreach (DataRow dataRow in dataSet.Tables[0].Rows)
                     {
-                        stokKart = GlobalData.DataRowToModel<StokKart>(dataRow);
+                        stokKart = ConvertHelper.DataRowToModel<StokKart>(dataRow);
                         stokKarts.Add(stokKart);
                     }
                 }

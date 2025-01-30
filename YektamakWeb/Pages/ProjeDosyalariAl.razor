@@ -1,6 +1,6 @@
 ﻿@page "/ProjeDosyalariAl"
 @using Models
-@using Requests
+@using ApiService
 @using System.Data
 @using Microsoft.AspNetCore;
 @using NPOI.HSSF.UserModel;
@@ -43,7 +43,6 @@
 }
 
 @code {
-    [Inject] GlobalData _globalData { get; set; } = default!;
     [Inject] IHttpContextAccessor? _httpContextAccessor { get; set; }
     [Inject] ProgramConst? _constants { get; set; }
 
@@ -156,7 +155,7 @@
                 StokKart stokKart = new StokKart();
                 MalzemeGrup malzemeGrup = new MalzemeGrup();
                 malzemeGrup.ad = rowData.GetCell(9)?.ToString() ?? "";
-                malzemeGrup = Utilities.GlobalData.DataRowToModel<MalzemeGrup>(Utilities.GlobalData.JsonStringToDataSet(WebMethods.GetMalzemeGrup(malzemeGrup)).Tables[0].Rows[0]);
+                malzemeGrup = Utilities.Common.ConvertHelper.DataRowToModel<MalzemeGrup>(Utilities.Common.ConvertHelper.JsonStringToDataSet(WebMethods.GetMalzemeGrup(malzemeGrup)).Tables[0].Rows[0]);
                 stokKart.parcaGrup.Id = malzemeGrup.parcaGrupId;
                 stokKart.malzemeGrup.Id = malzemeGrup.Id;
                 stokKart.proje.Id = proje.Id;
@@ -175,11 +174,11 @@
                 stokKart.olcuBirim.Id = 1;
                 stokKart.isFromExcel = true;
                 stokKart.parcaAltGrup.Id = 1;
-                stokKart.stokTipId = 1;
+                stokKart.stokTip.Id = 1;
                 stokKart.profilTipId = 1;
                 var pdfFiles = files.First(file => file.Contains(stokKart.kod+".pdf"));
                 byte[] pdfContent = ReadPdfAsBinary(pdfFiles);
-                resultMessage=WebMethods.SaveStokKart(stokKart);
+                resultMessage=await WebMethods.SaveStokKart(stokKart);
             }
         }
         catch (Exception ex)

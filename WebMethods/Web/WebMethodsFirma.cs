@@ -1,33 +1,37 @@
 ﻿using Models;
 
 
-namespace Requests
+namespace ApiService
 {
     public partial class WebMethods
     {
         public static async Task<string> SaveFirma(Firma firma)
         {
-			return await PostAsyncMethod(firma, "SaveFirma");
+            return await PostAsyncMethod(firma, "SaveFirma");
         }
         public static async Task<string> FirmaGuncelle(Firma firma)
         {
-			return await PostAsyncMethod(firma, "FirmaGuncelle");
+            return await PostAsyncMethod(firma, "FirmaGuncelle");
         }
         public static string GetFilteredFirma(Firma firma)
         {
-			return Post(firma,"GetFilteredFirma");
+            return Post(firma, "GetFilteredFirma");
         }
         public static string DeleteFirma(Firma firma)
         {
-			return Post(firma, "DeleteFirma");
+            return Post(firma, "DeleteFirma");
         }
         public static async Task<string> DetayliFirma(Firma firma)
         {
-			return await PostAsyncMethod(firma, "DetayliFirma");
+            return await PostAsyncMethod(firma, "DetayliFirma");
         }
         public static async Task<string> FiltrelenmisFirmalar(FiltreFirma filtreFirma)
         {
-			return await PostAsyncMethod(filtreFirma, "FiltrelenmisFirmalar");
+            return await PostAsyncMethod(filtreFirma, "FiltrelenmisFirmalar");
+        }
+        public static string GetSektor(Sektor sektor)
+        {
+            return Post(sektor, "GetSektor");
         }
     }
     [Serializable]

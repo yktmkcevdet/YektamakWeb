@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class Ekran
+    public class Ekran:IEntity
     {
         public int ekranId;
         private Menu _menu;
@@ -21,14 +21,14 @@
         public string ekranAdi;
         public string formAdi;
     }
-    public class Menu
+    public class Menu:IEntity
     {
-        public int menuId;
-        public string menuAdi;
+        public int Id;
+        public string ad;
         public string formAdi;
         public string icon;
     }
-    public class Yetki
+    public class Yetki:IEntity
     {
         public int yetkiId;
         public int rolId;

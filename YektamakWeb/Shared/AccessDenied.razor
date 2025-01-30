@@ -1,2 +1,41 @@
-﻿<h3>Erişim Yetkiniz Yok</h3>
+﻿@page "/accessdenied"
+@using Microsoft.AspNetCore.Authentication.JwtBearer
+@using System.IdentityModel.Tokens.Jwt
+@using Microsoft.IdentityModel.Tokens
+@using System.Security.Claims
+@inject IHttpContextAccessor httpContextAccessor
+
+<h3>Erişim Yetkiniz Yok</h3>
 <p>Bu sayfayı görüntülemek için yetkiniz yok. Lütfen sistem yöneticinize başvurun.</p>
+
+@if (claims != null && claims.Any())
+{
+    <ul>
+        @foreach (var claim in claims)
+        {
+            <li>@claim.Type: @claim.Value</li>
+        }
+    </ul>
+}
+else
+{
+    <p>Herhangi bir claim bulunamadı.</p>
+}
+
+@code {
+    private List<Claim> claims;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var user = httpContextAccessor.HttpContext?.User;
+            if (user != null && user.Identity.IsAuthenticated)
+            {
+                claims = user.Claims.ToList();
+                StateHasChanged(); // Sayfayı yeniden render et
+            }
+        }
+    }
+}
+

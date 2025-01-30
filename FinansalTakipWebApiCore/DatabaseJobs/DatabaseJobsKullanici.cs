@@ -1,11 +1,12 @@
-﻿using FinansalTakipWebApiCore.Business;
+﻿using Api.Business;
 using Models;
+using Models.DTO;
 using System.ComponentModel.Design;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
-using static FinansalTakipWebApiCore.Business.DataAccessLayerMssql;
-namespace FinansalTakipWebApiCore.DatabaseJobs
+using static Api.Business.DataAccessLayerMssql;
+namespace Api.DatabaseJobs
 {
     public static class DatabaseJobsKullanici
     {
@@ -33,6 +34,14 @@ namespace FinansalTakipWebApiCore.DatabaseJobs
         {
 			return DataAccessLayer.dataAccesLayer.DeleteObject(ekran, "spDeleteEkran");
 		}
+        public static string GetAnaMenu(AnaMenu anaMenu)
+        {
+            return DataAccessLayer.dataAccesLayer.GetObject(anaMenu,"spGetAnaMenu");
+        }
+        public static string GetYetki(Yetki yetki)
+        {
+            return DataAccessLayer.dataAccesLayer.GetObject(yetki, "spGetYetki");
+        }
         public static string GetMenu()
         {
             return DataAccessLayer.dataAccesLayer.GetObject("spGetMenu");

@@ -3,9 +3,9 @@
     [Serializable]
     public class Personel:Cari,IEntity
     {
-        private int _personelId;
-        public int personelId
-        { get { return _personelId; } set { _personelId = value;base.Id = value; } }
+        private int _Id;
+        public int Id
+        { get { return _Id; } set { _Id = value;base.Id = value; } }
         public string ad;
         public string soyad;
         public string telefon;//Daha sonra property içinde formatlama kuralları yazılacak +xx(xxx)xxxxxxx gibi
@@ -19,7 +19,7 @@
         public Personel()
         {
             base.cariTuru = CariTuru.PERSONEL;
-            base.Id = personelId;
+            base.Id = Id;
         }
         
     }

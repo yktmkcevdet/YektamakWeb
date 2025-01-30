@@ -1,4 +1,4 @@
-﻿using FinansalTakipWebApiCore.DatabaseJobs;
+﻿using Api.DatabaseJobs;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Newtonsoft.Json;
@@ -7,7 +7,7 @@ using System.Text;
 
 
 
-namespace FinansalTakipWebApiCore.Controllers
+namespace Api.Controllers
 {
     public class ProjeKodController : Controller
     {
@@ -147,6 +147,11 @@ namespace FinansalTakipWebApiCore.Controllers
         public string GetProjeKodByUserId([FromBody] string restData)
         {
             return GeneralMethods.ResultData<Proje>(restData, DataBaseJobsProjeKod.GetProjeKodByUserId);
+        }
+        [HttpPost, Route("api/GetProje/")]
+        public string GetProje([FromBody] string restData)
+        {
+            return GeneralMethods.ResultData<Proje>(restData, DataBaseJobsProjeKod.GetProje);
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using FinansalTakipWebApiCore.Business;
+﻿using Api.Business;
 using Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
-using static FinansalTakipWebApiCore.Business.DataAccessLayerMssql;
+using static Api.Business.DataAccessLayerMssql;
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public class DatabaseJobsStokKart
 	{
@@ -40,6 +40,22 @@ namespace FinansalTakipWebApiCore.DatabaseJobs
         public static string GetMalzemeGrup(MalzemeGrup malzemeGrup)
         {
             return DataAccessLayer.dataAccesLayer.GetObject(malzemeGrup, "spGetMalzemeGrup");
+        }
+        public static string GetStokTip(StokTip stokTip)
+        {
+            return DataAccessLayer.dataAccesLayer.GetObject(stokTip, "spGetStokTip");
+        }
+        public static string GetProfilTip(ProfilTip profilTip)
+        {
+            return DataAccessLayer.dataAccesLayer.GetObject(profilTip, "spGetProfilTip");
+        }
+        public static string GetOlcuBirim(OlcuBirim olcuBirim)
+        {
+            return DataAccessLayer.dataAccesLayer.GetObject(olcuBirim, "spGetOlcuBirim");
+        }
+        public static string GetMalzemeStandart(MalzemeStandart malzemeStandart)
+        {
+            return DataAccessLayer.dataAccesLayer.GetObject(malzemeStandart, "spGetMalzemeStandart");
         }
     }
 }

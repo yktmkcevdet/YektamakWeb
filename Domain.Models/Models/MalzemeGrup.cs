@@ -6,6 +6,6 @@
         public string ad;
         public string kod;
         public int parcaGrupId;
-        public bool? isUretim;
+        public bool isUretim;
     }
 }

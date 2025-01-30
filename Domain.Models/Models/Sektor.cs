@@ -1,9 +1,10 @@
 ﻿namespace Models
 {
     [Serializable]
-    public class Sektor
+    public class Sektor:IEntity
     {
-        public int sektorId;
-        public string sektorAd;
+        public int Id;
+        public string ad;
+        public string kod;
     }
 }

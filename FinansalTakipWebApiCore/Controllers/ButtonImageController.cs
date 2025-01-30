@@ -1,8 +1,8 @@
 ﻿using Models;
-using FinansalTakipWebApiCore.DatabaseJobs;
+using Api.DatabaseJobs;
 using Microsoft.AspNetCore.Mvc;
-using static FinansalTakipWebApiCore.Controllers.GeneralMethods;
-namespace FinansalTakipWebApiCore.Controllers
+using static Api.Controllers.GeneralMethods;
+namespace Api.Controllers
 {
     public class ButtonImageController:Controller
     {

@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 
-namespace FinansalTakipWebApiCore.Business
+namespace Api.Business
 {
     public interface IDeriveParameters
     {

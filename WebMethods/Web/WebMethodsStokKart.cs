@@ -1,20 +1,24 @@
 ﻿using Models;
 
-namespace Requests
+namespace ApiService
 {
     partial class WebMethods
 	{
-		public static async Task<string> GetStokKart(StokKart stokKart=null)
+		public static async Task<string> GetStokKartAsync(StokKart stokKart=null)
 		{
 			return await PostAsyncMethod(stokKart, "GetStokKart");
 		}
-        public static async Task<string> GetStokKartPdf(StokKart stokKart = null)
+        public static string GetStokKart(StokKart stokKart = null)
         {
-             return await PostAsyncMethod(stokKart, "GetStokKartPdf");
+            return Post(stokKart, "GetStokKart");
         }
-        public static string SaveStokKart(StokKart stokKart)
+        public static string GetStokKartPdf(StokKart stokKart = null)
+        {
+             return Post(stokKart, "GetStokKartPdf");
+        }
+        public static async Task<string> SaveStokKart(StokKart stokKart)
 		{
-			return Post(stokKart, "SaveStokKart");
+			return await PostAsyncMethod(stokKart, "SaveStokKart");
 		}
 		public static string GetMalzeme(Malzeme malzeme = null)
 		{
@@ -31,6 +35,22 @@ namespace Requests
         public static string GetMalzemeGrup(MalzemeGrup malzemeGrup = null)
         {
             return Post(malzemeGrup, "GetMalzemeGrup");
+        }
+        public static string GetStokTip(StokTip stokTip = null)
+        {
+            return Post(stokTip, "GetStokTip");
+        }
+        public static string GetProfilTip(ProfilTip profilTip = null)
+        {
+            return Post(profilTip, "GetProfilTip");
+        }
+        public static string GetOlcuBirim(OlcuBirim olcuBirim = null)
+        {
+            return Post(olcuBirim, "GetOlcuBirim");
+        }
+        public static string GetMalzemeStandart(MalzemeStandart malzemeStandart= null)
+        {
+            return Post(malzemeStandart, "GetMalzemeStandart");
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Models;
 using System.Data.SqlClient;
 using System.Data;
-using FinansalTakipWebApiCore.Business;
-namespace FinansalTakipWebApiCore.DatabaseJobs
+using Api.Business;
+namespace Api.DatabaseJobs
 {
     public class DataBaseJobsKasa
     {

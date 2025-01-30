@@ -1,10 +1,10 @@
 ﻿using System.Text;
-using FinansalTakipWebApiCore.DatabaseJobs;
+using Api.DatabaseJobs;
 using Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace FinansalTakipWebApiCore.Controllers
+namespace Api.Controllers
 {
     public class KrediKartiController
     {

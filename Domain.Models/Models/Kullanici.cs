@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class Kullanici
+    public class Kullanici:IEntity
     {
         public int Id;
         public string ad;

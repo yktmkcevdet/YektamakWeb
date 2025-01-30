@@ -1,4 +1,4 @@
-﻿namespace FinansalTakipWebApiCore.Controllers
+﻿namespace Api.Controllers
 {
     [Serializable]
     /// <summary>

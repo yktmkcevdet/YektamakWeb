@@ -1,11 +1,11 @@
 ﻿@page "/Proje/"
-@attribute [Authorize(Policy = "ProjeTasarimMuhendisiOnly")]
 @using BlazorApp1.Features.Commands.Account.Login
 @using Microsoft.AspNetCore.Components.Rendering
 @using Models
-@using Requests
+@using ApiService
 @using System.Data
 @using Utilities
+@using Utilities.Common
 @using YektamakWeb.Components.Dialogs
 
 
@@ -141,7 +141,6 @@ else
 <DialogFragment @ref="dialogFragment">@renderFragment()</DialogFragment> 
 @code {
     @inject ProgramConst _constants
-    @inject UserSession _userSession
     [Inject]
     private NavigationManager? navigation { get; set; }
     private PdfView pdfViewer;
@@ -181,13 +180,13 @@ else
             stokKart.parcaGrup.Id = selectedParcaGrupId;
             stokKart.ad = parcaAdi;
             stokKart.malzemeGrup.Id = selectedMalzemeGrupId;
-            string serializeString = await WebMethods.GetStokKart(stokKart);
-            DataSet dataSet = GlobalData.JsonStringToDataSet(serializeString);
+            string serializeString = WebMethods.GetStokKart(stokKart);
+            DataSet dataSet = ConvertHelper.JsonStringToDataSet(serializeString);
             if (dataSet != null)
             {
                 foreach (DataRow dataRow in dataSet.Tables[0].Rows)
                 {
-                    stokKart = GlobalData.DataRowToModel<StokKart>(dataRow);
+                    stokKart = ConvertHelper.DataRowToModel<StokKart>(dataRow);
                     stokKarts.Add(stokKart);
                     if (parcaGrup.Count(id => id.Key == stokKart.parcaGrup.Id) == 0)
                     {
@@ -208,17 +207,17 @@ else
         }
     }
 
-    private async void PdfGoster(long stokKartId)
+    private void PdfGoster(int stokKartId)
     {
         StokKart stokKart = new StokKart();
         stokKart.Id = stokKartId;
-        string serializeString = await WebMethods.GetStokKartPdf(stokKart);
-        DataSet dataSet = GlobalData.JsonStringToDataSet(serializeString);
+        string serializeString = WebMethods.GetStokKartPdf(stokKart);
+        DataSet dataSet = ConvertHelper.JsonStringToDataSet(serializeString);
         if (dataSet != null)
         {
             foreach (DataRow dataRow in dataSet.Tables[0].Rows)
             {
-                stokKart = GlobalData.DataRowToModel<StokKart>(dataRow);
+                stokKart = ConvertHelper.DataRowToModel<StokKart>(dataRow);
             }
         }
         

@@ -1,21 +1,18 @@
-﻿using Models;
-using Requests;
-using System.Data;
+﻿using ApiService;
 using BlazorBootstrap;
-using Microsoft.AspNetCore.Http;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System.Threading.Tasks;
-using Utilities;
+using Models;
+using System.Data;
+using Utilities.Common;
 
 namespace YektamakWeb.Services.StokKartService
 {
     public class StokKartService : IStokKartService
     {
-        public async Task<(IEnumerable<StokKart>, int)> GetStokKarts(GridDataProviderRequest<StokKart> request)
+        public (IEnumerable<StokKart>, int) GetStokKarts(GridDataProviderRequest<StokKart> request)
         {
             List<StokKart> stokKartList = new List<StokKart>();
-            string jsonString = await WebMethods.GetStokKart(new StokKart());
-            DataSet dataSet = GlobalData.JsonStringToDataSet(jsonString);
+            string jsonString = WebMethods.GetStokKart(new StokKart());
+            DataSet dataSet = ConvertHelper.JsonStringToDataSet(jsonString);
             foreach (DataRow dr in dataSet.Tables[0].Rows)
             {
                 StokKart stokKart = new();

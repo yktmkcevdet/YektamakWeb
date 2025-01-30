@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Requests
+﻿namespace ApiService
 {
     public interface IWebMethods
     {
         public Task<string> GetAsyncMethod(string apiAdres);
         public string Get(string apiAdres);
+        public Task<string> GetMenu();
     }
 }

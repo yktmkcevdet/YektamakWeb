@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace FinansalTakipWebApiCore.TokenJobs
+namespace Api.TokenJobs
 {
     public class TokenService
     {

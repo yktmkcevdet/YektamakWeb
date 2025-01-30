@@ -1,9 +1,9 @@
-﻿using FinansalTakipWebApiCore.DatabaseJobs;
+﻿using Api.DatabaseJobs;
 using Models;
 using Microsoft.AspNetCore.Mvc;
-using static FinansalTakipWebApiCore.Controllers.GeneralMethods;
+using static Api.Controllers.GeneralMethods;
 
-namespace FinansalTakipWebApiCore.Controllers
+namespace Api.Controllers
 {
     public class SatinalmaTalepController:Controller
     {

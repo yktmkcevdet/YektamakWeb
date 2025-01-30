@@ -3,9 +3,9 @@ using System.Data.SqlClient;
 using System.Data;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using FinansalTakipWebApiCore.Business;
+using Api.Business;
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public static partial class DataBaseJobsPersonel
     {

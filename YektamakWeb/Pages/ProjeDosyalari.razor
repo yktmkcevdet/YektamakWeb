@@ -2,7 +2,7 @@
 
 @using BlazorApp1.Features.Commands.Account.Login
 @using Models
-@using Requests
+@using ApiService
 @using System.Data
 @using Utilities;
 
@@ -71,7 +71,6 @@ else
 }
 @code {
 
-@inject GlobalData _globalData
     @inject UserSession _userSession
     private ProgramConst _constants;
 }

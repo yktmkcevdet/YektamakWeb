@@ -1,9 +1,9 @@
-﻿using FinansalTakipWebApiCore.Business;
+﻿using Api.Business;
 using Models;
 using Newtonsoft.Json;
 using System.Data.SqlClient;
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public static class DataBaseJobsKrediKarti
     {

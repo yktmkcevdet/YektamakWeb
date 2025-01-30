@@ -1,9 +1,9 @@
-﻿using FinansalTakipWebApiCore.DatabaseJobs;
+﻿using Api.DatabaseJobs;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using static FinansalTakipWebApiCore.Controllers.GeneralMethods;
+using static Api.Controllers.GeneralMethods;
 
-namespace FinansalTakipWebApiCore.Controllers
+namespace Api.Controllers
 {
     public class StokKartController
 	{
@@ -46,6 +46,26 @@ namespace FinansalTakipWebApiCore.Controllers
         public string GetMalzemeGrup([FromBody] string restData)
         {
             return ResultData<MalzemeGrup>(restData, DatabaseJobsStokKart.GetMalzemeGrup);
+        }
+        [HttpPost, Route("api/GetStokTip")]
+        public string GetStokTip([FromBody] string restData)
+        {
+            return ResultData<StokTip>(restData, DatabaseJobsStokKart.GetStokTip);
+        }
+        [HttpPost, Route("api/GetProfilTip")]
+        public string GetProfilTip([FromBody] string restData)
+        {
+            return ResultData<ProfilTip>(restData, DatabaseJobsStokKart.GetProfilTip);
+        }
+        [HttpPost, Route("api/GetOlcuBirim")]
+        public string GetOlcuBirim([FromBody] string restData)
+        {
+            return ResultData<OlcuBirim>(restData, DatabaseJobsStokKart.GetOlcuBirim);
+        }
+        [HttpPost, Route("api/GetMalzemeStandart")]
+        public string GetMalzemeStandart([FromBody] string restData)
+        {
+            return ResultData<MalzemeStandart>(restData, DatabaseJobsStokKart.GetMalzemeStandart);
         }
     }
 }

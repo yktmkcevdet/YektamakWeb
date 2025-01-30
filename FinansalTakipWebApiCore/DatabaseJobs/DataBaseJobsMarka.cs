@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 using System.Data;
 using Newtonsoft.Json;
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public partial class DataBaseJobsMarka
     {

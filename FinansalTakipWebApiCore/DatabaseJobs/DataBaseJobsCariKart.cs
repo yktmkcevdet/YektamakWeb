@@ -4,9 +4,9 @@ using System.Data;
 using Newtonsoft.Json;
 using System.Net.NetworkInformation;
 using Newtonsoft.Json.Linq;
-using FinansalTakipWebApiCore.Business;
+using Api.Business;
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public class DataBaseJobsCariKart
     {

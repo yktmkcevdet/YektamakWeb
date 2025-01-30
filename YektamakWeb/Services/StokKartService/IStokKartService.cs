@@ -5,6 +5,6 @@ namespace YektamakWeb.Services.StokKartService
 {
     public interface IStokKartService
     {
-        public Task<(IEnumerable<StokKart>, int)> GetStokKarts(GridDataProviderRequest<StokKart> request);
+        public (IEnumerable<StokKart>, int) GetStokKarts(GridDataProviderRequest<StokKart> request);
     }
 }

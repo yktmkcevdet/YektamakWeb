@@ -3,7 +3,7 @@ using Newtonsoft.Json.Converters;
 using Models;
 
 
-namespace Requests
+namespace ApiService
 {
     public partial class WebMethods
     {

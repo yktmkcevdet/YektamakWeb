@@ -1,4 +1,4 @@
-﻿namespace FinansalTakipWebApiCore.Business
+﻿namespace Api.Business
 {
     public static class DataAccessLayer
     {

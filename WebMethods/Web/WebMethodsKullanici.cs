@@ -1,6 +1,7 @@
 ﻿using Models;
+using Models.DTO;
 
-namespace Requests
+namespace ApiService
 {
     partial class WebMethods
     {
@@ -11,6 +12,10 @@ namespace Requests
         public static string  GetKullanici(Kullanici kullanici)
         {
             return Post(kullanici, "GetKullanici");
+        }
+        public static async Task<string> GetKullaniciAsync(Kullanici kullanici)
+        {
+            return await PostAsyncMethod(kullanici, "GetKullanici");
         }
 
         public static string GetKullaniciYetki(Kullanici kullanici)
@@ -30,15 +35,24 @@ namespace Requests
         {
             return await PostAsyncMethod(ekran, "DeleteEkran");
         }
-        public async Task<string> GetMenu()
+        public static string GetAnaMenu(AnaMenu anaMenu)
         {
-            return await GetAsyncMethod("GetMenu");
+            return Post(anaMenu, "GetAnaMenu");
         }
+        public static string GetMenu(Menu menu=null)
+        {
+            return Get("GetMenu");
+        }
+        public static string GetYetki(Yetki yetki)
+        {
+            return Post(yetki,"GetYetki");
+        }
+
         public static async Task<string> SaveMenu(Menu menu)
         {
             return await PostAsyncMethod(menu, "SaveMenu");
         }
-        public static async Task<string> DeleteMenu(Menu menu)
+        public async Task<string> DeleteMenu(Menu menu)
         {
             return await PostAsyncMethod(menu, "DeleteMenu");
         }

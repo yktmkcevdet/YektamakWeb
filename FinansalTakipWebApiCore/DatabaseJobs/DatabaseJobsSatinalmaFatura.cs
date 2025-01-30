@@ -3,11 +3,11 @@ using System.Data.SqlClient;
 using System.Data;
 using Newtonsoft.Json;
 using System.Reflection.Metadata;
-using FinansalTakipWebApiCore.Controllers;
-using static FinansalTakipWebApiCore.Business.DataAccessLayerMssql;
-using FinansalTakipWebApiCore.Business;
+using Api.Controllers;
+using static Api.Business.DataAccessLayerMssql;
+using Api.Business;
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public static partial class DataBaseJobsSatinalmaFatura
     {

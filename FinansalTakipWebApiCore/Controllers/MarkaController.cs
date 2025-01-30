@@ -1,9 +1,9 @@
-﻿using FinansalTakipWebApiCore.DatabaseJobs;
+﻿using Api.DatabaseJobs;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace FinansalTakipWebApiCore.Controllers
+namespace Api.Controllers
 {
     public class MarkaController : Controller
     {

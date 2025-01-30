@@ -1,7 +1,7 @@
-﻿using FinansalTakipWebApiCore.Business;
+﻿using Api.Business;
 using Models;
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public class DataBaseJobsSatisSiparisTeklifTalep
     {

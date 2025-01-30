@@ -1,13 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Requests.Constants;
-using System.Net.Http.Headers;
-using System.Net.Http;
+using ApiService.Constants;
 using System.Text;
 
-namespace Requests
+namespace ApiService
 {
-    public partial class WebMethods:IWebMethods
+    public partial class WebMethods
 	{
         private static HttpClientHandler handler = new HttpClientHandler
         {
@@ -58,7 +56,7 @@ namespace Requests
 			}
 			
 		}
-		public async Task<string> GetAsyncMethod(string apiAdres)
+		public static async Task<string> GetAsyncMethod(string apiAdres)
 		{
 			client.DefaultRequestHeaders.Clear();
 
@@ -69,7 +67,7 @@ namespace Requests
 			string returnValue = strResponse.Result;
 			return strResponse.Result;
 		}
-        public string Get(string apiAdres)
+        public static string Get(string apiAdres)
         {
             client.DefaultRequestHeaders.Clear();
             string url = ApiBaseUrl.server + "/api/" + apiAdres;

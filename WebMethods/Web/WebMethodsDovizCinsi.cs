@@ -1,4 +1,4 @@
-﻿namespace Requests
+﻿namespace ApiService
 {
     partial class WebMethods
     {

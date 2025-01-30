@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace FinansalTakipWebApiCore.Controllers
+namespace Api.Controllers
 {
     [ApiController]
     [Route("api/File")]

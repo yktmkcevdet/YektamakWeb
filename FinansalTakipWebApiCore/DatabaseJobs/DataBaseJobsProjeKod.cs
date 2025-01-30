@@ -3,10 +3,10 @@ using System.Data.SqlClient;
 using System.Data;
 using Newtonsoft.Json;
 using System.Reflection.Metadata;
-using FinansalTakipWebApiCore.Business;
+using Api.Business;
 
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public static partial class DataBaseJobsProjeKod
     {
@@ -58,6 +58,10 @@ namespace FinansalTakipWebApiCore.DatabaseJobs
         public static string GetProjeKodByUserId(Proje proje)
         {
             return DataAccessLayer.dataAccesLayer.GetObject(proje,"spGetProjeKodByUserId");
+        }
+        public static string GetProje(Proje proje)
+        {
+            return DataAccessLayer.dataAccesLayer.GetObject(proje, "spGetProje");
         }
         public static string GetProjeKodById(int projeKodID)
         {

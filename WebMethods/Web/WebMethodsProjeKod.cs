@@ -2,9 +2,9 @@
 using Models;
 using Newtonsoft.Json;
 using System.Data;
-using Requests.Constants;
+using ApiService.Constants;
 
-namespace Requests
+namespace ApiService
 {
     public partial class WebMethods
     {
@@ -66,6 +66,10 @@ namespace Requests
         public static async Task<string> DeleteProjeDosya(Proje proje)
         {
             return await PostAsyncMethod(proje, "DeleteProjeDosya");
+        }
+        public static string GetProje(Proje proje)
+        {
+            return Post(proje, "GetProje");
         }
     }
 

@@ -4,7 +4,7 @@ using System.Data;
 using Newtonsoft.Json;
 
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public static partial class DataBaseJobsDovizCinsi
     {

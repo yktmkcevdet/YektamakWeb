@@ -1,7 +1,7 @@
-﻿using FinansalTakipWebApiCore.TokenJobs;
+﻿using Api.TokenJobs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FinansalTakipWebApiCore.Controllers
+namespace Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

@@ -1,4 +1,4 @@
-﻿using FinansalTakipWebApiCore.DatabaseJobs;
+﻿using Api.DatabaseJobs;
 using System.Data.SqlClient;
 using System.Data;
 using System.Reflection;
@@ -15,7 +15,7 @@ using System.Data.Common;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 
-namespace FinansalTakipWebApiCore.Business
+namespace Api.Business
 {
     public class DataAccessLayerMssql:IDataAccesLayer
 	{

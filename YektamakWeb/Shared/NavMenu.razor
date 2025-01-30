@@ -3,6 +3,9 @@
 @using Utilities
 @using YektamakWeb.Components.Dialogs
 @using YektamakWeb.Pages
+@using Utilities.Common
+@using Models.DTO
+@using YektamakWeb.Commands.Accounts
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <nav class="flex-column">
         <img src="/logo.png" alt="Default Image" class="default-image" />
@@ -10,22 +13,21 @@
             YEKTAMAK
         </a>
         
-        @if (!userSession.IsLoggedIn)
+        @if (!isAuth)
         {
             <div class="nav-item px-3">
                 <NavLink class="nav-tabs" href="">
                     <span class="oi oi-list-rich" aria-hidden="true"></span> Login
                 </NavLink>
             </div>
-
         }
         else
         {
-            @foreach (Menu menu in userSession.anaMenuList)
+            @foreach (AnaMenu menu in Cache.ananaMenuList)
             {
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="#" @onclick="()=>OpenPage(menu.menuAdi)">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> @menu.menuAdi
+                    <NavLink class="nav-link" href="#" @onclick="()=>OpenPage(menu.ad)">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> @menu.ad
                     </NavLink>
                 </div>
             } 
@@ -34,19 +36,21 @@
 </div>
 
 @code {
-@inject GlobalData _globalData
-    [Inject] 
-    private UserSession userSession{ get; set; }
+    // [Inject] 
+    // private UserSession userSession{ get; set; }
     [Inject]
     private NavigationManager? navigation { get; set; }
+    
+    //private readonly IHttpContextAccessor _contextAccessor;
+    private bool isAuth = false;
     protected override void OnInitialized()
     {
-        userSession.OnChange += StateHasChanged;
+        //userSession.OnChange += StateHasChanged;
     }
 
     public void Dispose()
     {
-        userSession.OnChange -= StateHasChanged;
+        //userSession.OnChange -= StateHasChanged;
     }
     private bool collapseNavMenu = false;
 
@@ -60,6 +64,4 @@
     {
         navigation?.NavigateTo(char.ToUpper(page[0])+page.Substring(1).ToLower());
     }
-
-    
 }

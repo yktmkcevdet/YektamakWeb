@@ -1,7 +1,7 @@
 ﻿using Models;
 using System.Data.SqlClient;
 using System.Data;
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public static partial class DataBaseJobsKDV
     {

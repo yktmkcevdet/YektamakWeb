@@ -3,10 +3,10 @@ using System.Data.SqlClient;
 using System.Data;
 using Newtonsoft.Json;
 using System.Reflection.Metadata;
-using FinansalTakipWebApiCore.Business;
+using Api.Business;
 
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public static partial class DatabaseJobsSatinalmaSiparis
     {

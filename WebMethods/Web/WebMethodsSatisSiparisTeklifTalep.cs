@@ -1,6 +1,6 @@
 ﻿using Models;
 
-namespace Requests
+namespace ApiService
 {
     partial class WebMethods
     {

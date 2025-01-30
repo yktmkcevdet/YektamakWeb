@@ -6,7 +6,7 @@ using Newtonsoft.Json.Converters;
 using System.Reflection;
 using Npgsql;
 using MySql.Data.MySqlClient;
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public static partial class DataBaseJobsGeneral
     {

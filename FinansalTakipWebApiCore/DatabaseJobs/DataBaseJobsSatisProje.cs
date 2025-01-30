@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 using System.Reflection.Metadata;
 using System.Linq.Expressions;
 using Microsoft.SqlServer.Server;
-using FinansalTakipWebApiCore.Business;
+using Api.Business;
 
-namespace FinansalTakipWebApiCore.DatabaseJobs
+namespace Api.DatabaseJobs
 {
     public static class DataBaseJobsSatisProje
     {
